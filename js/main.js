@@ -64,6 +64,41 @@
       d.appendChild(body);
     });
 
+    // State guide topic explorer (tab list -> detail panel)
+    var topicNav = document.querySelector('.topic-nav');
+    if (topicNav) {
+      var selectTopic = function (key, focus) {
+        topicNav.querySelectorAll('.topic-btn').forEach(function (b) {
+          var on = b.getAttribute('data-topic') === key;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        document.querySelectorAll('.topic-panel').forEach(function (panel) {
+          var on = panel.id === 'panel-' + key;
+          panel.hidden = !on;
+          panel.classList.remove('switching');
+          if (on) {
+            void panel.offsetWidth; // restart the entrance animation
+            panel.classList.add('switching');
+            if (focus) panel.focus({ preventScroll: true });
+          }
+        });
+      };
+      topicNav.addEventListener('click', function (e) {
+        var btn = e.target.closest('.topic-btn');
+        if (!btn) return;
+        selectTopic(btn.getAttribute('data-topic'), false);
+        if (history.replaceState) history.replaceState(null, '', '#' + btn.getAttribute('data-topic'));
+      });
+      // deep link: /states/texas.html#schools opens that topic
+      var applyHash = function () {
+        var hash = location.hash.replace('#', '');
+        if (hash && topicNav.querySelector('[data-topic="' + hash + '"]')) selectTopic(hash, false);
+      };
+      applyHash();
+      window.addEventListener('hashchange', applyHash);
+    }
+
     // Reveal-on-scroll: tag common blocks, then observe
     if (!reduceMotion && 'IntersectionObserver' in window) {
       var targets = document.querySelectorAll(
