@@ -747,7 +747,92 @@ details.faq p { color: var(--gray); font-size: .96rem; }
   background-color: #fff;
   box-shadow: 0 0 0 4px rgba(14, 32, 54, .08);
 }
-.calc button { width: 100%; margin-top: 28px; }
+/* station type-ahead */
+.combo { position: relative; }
+.combo-icon {
+  position: absolute;
+  left: 16px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-light);
+  pointer-events: none;
+}
+.combo-icon svg { width: 18px; height: 18px; display: block; }
+.combo input { padding-left: 46px; background-image: none; }
+.combo-list {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 6px);
+  left: 0; right: 0;
+  list-style: none;
+  margin: 0; padding: 6px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-lg);
+  max-height: 320px;
+  overflow-y: auto;
+  animation: panelIn .25s var(--ease);
+}
+.combo-list li {
+  padding: 11px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  line-height: 1.35;
+}
+.combo-list li strong { display: block; font-size: .93rem; color: var(--ink); }
+.combo-list li small { display: block; font-size: .78rem; color: var(--gray); }
+.combo-list li:hover, .combo-list li.active { background: var(--cream); }
+.combo-list li.active strong { color: var(--red); }
+.combo-list li.combo-empty { cursor: default; color: var(--gray); font-size: .85rem; }
+.combo-list li.combo-empty:hover { background: none; }
+
+/* segmented control + grade pills */
+.seg {
+  display: flex;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+}
+.seg button {
+  flex: 1;
+  padding: 10px 8px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font-family: inherit;
+  font-size: .88rem;
+  font-weight: 650;
+  color: var(--gray);
+  cursor: pointer;
+  transition: background .25s var(--ease), color .25s var(--ease), box-shadow .25s var(--ease);
+}
+.seg button:hover { color: var(--navy); }
+.seg button.active {
+  background: var(--navy);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(14, 32, 54, .25);
+}
+.pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.pills .pill {
+  padding: 9px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  font-family: inherit;
+  font-size: .88rem;
+  font-weight: 650;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease);
+}
+.pills .pill:hover { border-color: var(--navy); transform: translateY(-1px); }
+.pills .pill.active { background: var(--red); border-color: var(--red); color: #fff; }
+.calc-hint { margin-top: 20px; text-align: center; font-size: .85rem; color: var(--gray); }
+.calc .result.show + .calc-hint, .calc .result.show ~ .calc-hint { display: none; }
+
+.calc .seg button, .calc .pills .pill { width: auto; margin-top: 0; }
 .calc .result {
   margin-top: 28px;
   padding: 30px;
@@ -758,6 +843,7 @@ details.faq p { color: var(--gray); font-size: .96rem; }
   display: none;
   animation: resultIn .7s var(--ease);
 }
+.calc .result.show { display: block; }
 @keyframes resultIn { from { opacity: 0; transform: translateY(16px) scale(.98); } to { opacity: 1; transform: none; } }
 .calc .result .amount {
   font-family: "Fraunces", Georgia, serif;

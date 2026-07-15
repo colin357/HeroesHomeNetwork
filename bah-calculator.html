@@ -74,21 +74,30 @@
 <section class="band alt">
   <div class="container">
     <div class="calc">
-      <label for="station">Duty Station</label>
-      <select id="station"></select>
-      <label for="grade">Pay Grade</label>
-      <select id="grade"></select>
-      <label for="dep">Dependency Status</label>
-      <select id="dep">
-        <option value="with">With Dependents</option>
-        <option value="without">Without Dependents</option>
-      </select>
-      <button class="btn btn-red" id="calc-btn" type="button">Estimate My BAH</button>
+      <label for="station-input">Duty Station</label>
+      <div class="combo">
+        <span class="combo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
+        <input id="station-input" type="text" role="combobox" aria-expanded="false" aria-controls="station-list" aria-autocomplete="list" autocomplete="off" placeholder="Search by base, city, or state — e.g. &quot;Bragg&quot;, &quot;Tampa&quot;, &quot;HI&quot;">
+        <ul id="station-list" class="combo-list" role="listbox" hidden></ul>
+      </div>
+      <label>Pay Grade</label>
+      <div class="seg" id="grade-cats" role="group" aria-label="Pay grade category">
+        <button type="button" class="active" data-cat="E">Enlisted</button>
+        <button type="button" data-cat="W">Warrant</button>
+        <button type="button" data-cat="O">Officer</button>
+      </div>
+      <div class="pills" id="grade-pills" role="group" aria-label="Pay grade"></div>
+      <label>Dependency Status</label>
+      <div class="seg" id="dep-pills" role="group" aria-label="Dependency status">
+        <button type="button" class="active" data-dep="with">With Dependents</button>
+        <button type="button" data-dep="without">Without Dependents</button>
+      </div>
       <div class="result" id="result" aria-live="polite">
         <div>Estimated Monthly BAH</div>
         <div class="amount" id="amount">$0</div>
         <small id="detail"></small>
       </div>
+      <p class="calc-hint" id="calc-hint">Pick a duty station to see your estimate — it updates live as you change options.</p>
     </div>
     <p class="center" style="max-width:640px;margin:1.4rem auto 0;font-size:.82rem;color:var(--gray)">
       Estimates are based on representative published BAH rates and are for planning purposes only. Your exact rate is set by the Department of Defense by ZIP code, pay grade, and dependency status — verify at the official <a href="https://www.travel.dod.mil/Allowances/Basic-Allowance-for-Housing/" rel="noopener">DoD BAH rate lookup</a>.
