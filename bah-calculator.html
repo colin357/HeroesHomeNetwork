@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BAH Calculator 2026 — Estimate Your Military Housing Allowance | Heroes Home Network</title>
+<meta name="description" content="Free 2026 BAH calculator for military members. Estimate your Basic Allowance for Housing by duty station and pay grade, and see how BAH translates into a mortgage budget with a VA loan.">
+<link rel="canonical" href="https://heroeshomenetwork.com/bah-calculator.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="BAH Calculator 2026 — Estimate Your Military Housing Allowance">
+<meta property="og:description" content="Estimate your BAH by duty station and pay grade, then see what it means for your home buying budget.">
+<meta property="og:url" content="https://heroeshomenetwork.com/bah-calculator.html">
+<link rel="stylesheet" href="/css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "BAH Calculator",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "url": "https://heroeshomenetwork.com/bah-calculator.html",
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "description": "Free calculator that estimates Basic Allowance for Housing (BAH) for U.S. military members by duty station and pay grade."
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "What is BAH?", "acceptedAnswer": {"@type": "Answer", "text": "Basic Allowance for Housing (BAH) is a monthly, non-taxable allowance paid to U.S. service members to offset housing costs when government quarters are not provided. Rates vary by duty station ZIP code, pay grade, and dependency status."}},
+    {"@type": "Question", "name": "Can BAH be used to qualify for a mortgage?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Lenders count BAH as effective income for VA loan qualification, and because it is non-taxable, many lenders gross it up when calculating your qualifying income."}},
+    {"@type": "Question", "name": "Does BAH change when I PCS?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. BAH is tied to your duty station's ZIP code, so your rate changes when you PCS. Rate protection generally prevents your BAH from decreasing while you remain at the same duty station."}}
+  ]
+}
+</script>
+</head>
+<body>
+<div class="topbar">Serving Military Families in All 50 States &nbsp;•&nbsp; <a href="tel:+17192592246">(719) 259-2246</a></div>
+<header class="site">
+  <div class="nav-wrap">
+    <a class="logo" href="/"><strong>Heroes <span class="star">★</span> Home Network</strong><span>PCS. VA Loans. Home.</span></a>
+    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+    <nav class="main">
+      <ul>
+        <li><a href="/states/">PCS State Guides</a></li>
+        <li><a href="/va-loan-guide.html">VA Loan Guide</a></li>
+        <li><a href="/bah-calculator.html">BAH Calculator</a></li>
+        <li><a href="/pcs-checklist.html">PCS Checklist</a></li>
+        <li><a href="/resources.html">Resources</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn-red nav-cta" href="tel:+17192592246">Call (719) 259-2246</a>
+  </div>
+</header>
+
+<main>
+<section class="page-hero">
+  <div class="container">
+    <div class="crumbs"><a href="/">Home</a> / BAH Calculator</div>
+    <div class="eyebrow">Free Military Housing Tool</div>
+    <h1>BAH Calculator</h1>
+    <p>Estimate your Basic Allowance for Housing by duty station and pay grade — then see what it means for your home buying budget at your next PCS.</p>
+  </div>
+</section>
+
+<section class="band alt">
+  <div class="container">
+    <div class="calc">
+      <label for="station">Duty Station</label>
+      <select id="station"></select>
+      <label for="grade">Pay Grade</label>
+      <select id="grade"></select>
+      <label for="dep">Dependency Status</label>
+      <select id="dep">
+        <option value="with">With Dependents</option>
+        <option value="without">Without Dependents</option>
+      </select>
+      <button class="btn btn-red" id="calc-btn" type="button">Estimate My BAH</button>
+      <div class="result" id="result" aria-live="polite">
+        <div>Estimated Monthly BAH</div>
+        <div class="amount" id="amount">$0</div>
+        <small id="detail"></small>
+      </div>
+    </div>
+    <p class="center" style="max-width:640px;margin:1.4rem auto 0;font-size:.82rem;color:var(--gray)">
+      Estimates are based on representative published BAH rates and are for planning purposes only. Your exact rate is set by the Department of Defense by ZIP code, pay grade, and dependency status — verify at the official <a href="https://www.travel.dod.mil/Allowances/Basic-Allowance-for-Housing/" rel="noopener">DoD BAH rate lookup</a>.
+    </p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="container prose">
+    <h2>What Is BAH?</h2>
+    <p>Basic Allowance for Housing (BAH) is a monthly, <strong>non-taxable</strong> allowance paid to service members to offset the cost of housing when government quarters aren't provided. Rates are set annually by the Department of Defense based on local rental market data at each duty station, your pay grade, and whether you have dependents.</p>
+
+    <h2>BAH and Buying a Home</h2>
+    <p>Here's what many military families don't realize: <strong>BAH can pay your mortgage.</strong> Lenders count BAH as effective income for VA loan qualification, and because it's tax-free, many lenders "gross it up" — treating it as worth more than its face value when calculating what you qualify for.</p>
+    <p>Combine that with the VA loan's $0 down payment and no PMI, and in many markets your BAH covers most or all of a monthly mortgage payment — meaning you build equity instead of mailing rent checks. Learn more in our <a href="/va-loan-guide.html">VA Loan Guide</a>.</p>
+
+    <h2>BAH Quick Facts</h2>
+    <ul>
+      <li>BAH is <strong>non-taxable</strong> — a dollar of BAH goes further than a dollar of base pay.</li>
+      <li>Rates update every January and are tied to your duty station ZIP code.</li>
+      <li><strong>Rate protection</strong> generally prevents your BAH from dropping while you stay at the same duty station.</li>
+      <li>You keep the difference if your housing costs less than your BAH.</li>
+      <li>Dual-military couples can each receive BAH.</li>
+    </ul>
+
+    <h2>FAQ</h2>
+    <details class="faq"><summary>Does BAH change when I PCS?</summary><p>Yes — your rate is tied to your duty station ZIP code, so it changes with every PCS. Check the guide for your next state in our <a href="/states/">PCS State Guides</a> to see typical housing costs before you move.</p></details>
+    <details class="faq"><summary>Is BAH counted as income for a mortgage?</summary><p>Yes. VA lenders count BAH as stable, effective income, and its tax-free status often allows it to be grossed up during qualification.</p></details>
+    <details class="faq"><summary>What if my duty station isn't listed?</summary><p>This tool covers major installations. For any ZIP code, use the official DoD rate lookup — or call us at <a href="tel:+17192592246">(719) 259-2246</a> and we'll run your exact numbers.</p></details>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container">
+    <h2>See what your BAH can buy.</h2>
+    <p>A VA loan specialist can turn your BAH estimate into a real pre-approval in about a day.</p>
+    <a class="btn btn-white" href="tel:+17192592246">Call (719) 259-2246</a>
+  </div>
+</section>
+</main>
+
+<footer class="site">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <strong>Heroes <span class="star">★</span> Home Network</strong>
+        <p>Helping veterans and military families research their next duty station, use their VA loan benefit, and buy a home in all 50 states.</p>
+        <p style="margin-top:.8rem"><a href="tel:+17192592246">(719) 259-2246</a></p>
+        <div class="eho">🏠 Equal Housing Opportunity</div>
+      </div>
+      <div>
+        <h4>PCS Resources</h4>
+        <ul>
+          <li><a href="/states/">State PCS Guides</a></li>
+          <li><a href="/pcs-checklist.html">PCS Checklist</a></li>
+          <li><a href="/bah-calculator.html">BAH Calculator</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>VA Loans</h4>
+        <ul>
+          <li><a href="/va-loan-guide.html">VA Loan Guide</a></li>
+          <li><a href="/va-loan-guide.html#eligibility">Eligibility</a></li>
+          <li><a href="/va-loan-guide.html#faq">VA Loan FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="/resources.html">Veteran Resources</a></li>
+          <li><a href="tel:+17192592246">Contact: (719) 259-2246</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-legal">
+      © 2026 Heroes Home Network. NMLS# 2040562. Licensed VA Loan Specialist. Equal Housing Lender. Not affiliated with the U.S. Department of Veterans Affairs.
+    </div>
+  </div>
+</footer>
+<script src="/js/main.js"></script>
+<script src="/js/bah-calculator.js"></script>
+</body>
+</html>
