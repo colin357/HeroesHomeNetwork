@@ -228,12 +228,29 @@ nav.main a:hover { background: rgba(14, 32, 54, .06); color: var(--navy); }
 
 .hero-art { position: relative; animation: heroArt 1.4s var(--ease) .3s both; }
 @keyframes heroArt { from { opacity: 0; transform: translateY(40px) scale(.96); } to { opacity: 1; transform: none; } }
-.hero-art svg { width: 100%; height: auto; filter: drop-shadow(0 40px 60px rgba(0, 0, 0, .35)); }
-.hero-art .float { animation: floatY 7s ease-in-out infinite; }
+.hero-art { animation: floatY 9s ease-in-out infinite; }
+.hero-photo {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--r-lg);
+  filter: saturate(.92) brightness(.96) contrast(1.02);
+}
+.hero-art::after {
+  /* navy fade-in from the left + soft vignette so the photo melts into the hero */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-lg);
+  background: linear-gradient(to right, #10233c 2%, rgba(16, 35, 60, .55) 30%, rgba(16, 35, 60, 0) 62%);
+  box-shadow: inset 0 0 64px 28px rgba(14, 32, 54, .85);
+  pointer-events: none;
+}
+.hero-badge { z-index: 2; }
 @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
 .hero-badge {
   position: absolute;
-  background: rgba(255, 255, 255, .1);
+  background: rgba(10, 22, 38, .55);
   border: 1px solid rgba(255, 255, 255, .18);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
