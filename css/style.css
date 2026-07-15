@@ -210,6 +210,13 @@ nav.main a:hover { background: rgba(14, 32, 54, .06); color: var(--navy); }
 }
 .hero .container { position: relative; z-index: 2; }
 .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+/* photo-less hero variant (hero-art temporarily removed) */
+.hero-solo { max-width: 820px; margin: 0 auto; text-align: center; }
+.hero-solo .eyebrow { justify-content: center; }
+.hero-solo .eyebrow::after { content: ""; width: 26px; height: 2px; background: currentColor; border-radius: 2px; }
+.hero-solo p.lead { margin-left: auto; margin-right: auto; }
+.hero-solo .hero-cta { justify-content: center; }
+.hero-solo .sub { justify-content: center; }
 .hero .eyebrow { color: var(--gold-soft); }
 .hero h1 .accent {
   background: linear-gradient(100deg, var(--gold-soft), #fff 60%);
