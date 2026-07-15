@@ -459,6 +459,30 @@ section.band.alt { background: var(--cream); }
 }
 .step p { color: var(--gray); font-size: .95rem; margin-top: .4rem; }
 
+/* State chip list (states index) */
+.state-list { display: flex; flex-wrap: wrap; gap: 12px; }
+.state-list a {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--navy);
+  font-size: .9rem;
+  font-weight: 600;
+  background: var(--paper);
+  box-shadow: var(--shadow-sm);
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease),
+    background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+}
+.state-list a:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
 /* --------------------------------------------------------------------------
    State guide topic explorer
    -------------------------------------------------------------------------- */
