@@ -1,12 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 430" role="img" aria-label="Heroes Home Network emblem">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 620" role="img" aria-label="Heroes Home Network logo">
+
   <defs>
-    <linearGradient id="mtn" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="mtnf" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#9aa4ad"/><stop offset="1" stop-color="#77828c"/>
     </linearGradient>
   </defs>
   <!-- mountains (behind roof) -->
   <g>
-    <path d="M455 372 530 160l6 44 34-70 56 118 20-40 34 88 6 72z" fill="url(#mtn)"/>
+    <path d="M455 372 530 160l6 44 34-70 56 118 20-40 34 88 6 72z" fill="url(#mtnf)"/>
     <path d="M570 134l16 34-16 8-14-12zM650 212l10 22-12 6-8-9z" fill="#e9edf1"/>
     <path d="M480 372l52-80 48 80z" fill="#8a949e"/>
     <path d="M532 292l11 17-11 6-10-7z" fill="#e9edf1"/>
@@ -41,4 +42,12 @@
   </g>
   <!-- roof (on top) -->
   <path d="M240 224 390 74 546 230" fill="none" stroke="#12294a" stroke-width="27" stroke-linecap="square" stroke-linejoin="miter"/>
+
+  <!-- wordmark -->
+  <g font-family="Inter, 'Arial Black', Arial, sans-serif" text-anchor="middle" font-weight="900">
+    <text x="330" y="500" font-size="112" letter-spacing="2" fill="#12294a">HER<tspan fill="none">O</tspan>ES</text>
+    <circle cx="362" cy="461" r="40" fill="none" stroke="#12294a" stroke-width="18"/>
+    <path d="M362 436l8.6 17.4 19.2 2.8-13.9 13.6 3.3 19.1-17.2-9-17.2 9 3.3-19.1-13.9-13.6 19.2-2.8z" fill="#12294a"/>
+    <text x="330" y="586" font-size="60" letter-spacing="8" fill="#b3202e">HOME NETWORK</text>
+  </g>
 </svg>
