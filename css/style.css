@@ -121,8 +121,8 @@ header.site.scrolled { box-shadow: 0 8px 32px rgba(15, 23, 34, .08); background:
   gap: 28px;
 }
 .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--navy); line-height: 1.05; }
-.logo img { width: auto; height: 48px; transition: transform .5s var(--ease); }
-.logo:hover img { transform: rotate(-4deg) scale(1.06); }
+.logo img { width: auto; height: 60px; transition: transform .5s var(--ease); }
+.logo:hover img { transform: scale(1.04); }
 .logo strong {
   display: block;
   font-family: "Fraunces", Georgia, serif;
@@ -610,10 +610,8 @@ footer.site li { margin-bottom: .65rem; }
 footer.site a { color: #9aa8ba; text-decoration: none; transition: color .25s; }
 footer.site a:hover { color: #fff; }
 .footer-grid { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr; gap: 44px; margin-bottom: 48px; }
-.footer-brand .f-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 1.1rem; }
-.footer-brand .f-logo img { width: auto; height: 48px; }
-.footer-brand strong { font-family: "Fraunces", Georgia, serif; font-size: 1.25rem; color: #fff; }
-.footer-brand .star { color: var(--red); }
+.footer-brand .f-logo { display: inline-flex; margin-bottom: 1.2rem; background: #fff; padding: 12px 18px; border-radius: 14px; box-shadow: 0 12px 30px rgba(0, 0, 0, .3); }
+.footer-brand .f-logo img { width: auto; height: 76px; }
 .footer-brand p { max-width: 380px; }
 .footer-legal {
   border-top: 1px solid rgba(255, 255, 255, .08);
