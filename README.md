@@ -39,3 +39,6 @@ update canonicals and `sitemap.xml` if deploying under a different domain.
 The BAH calculator (`js/bah-calculator.js`) uses representative rates for
 planning estimates only; update the anchor table annually when DoD publishes
 new rates.
+
+The states index map is derived from Wikimedia Commons "Blank US Map
+(states only)" (public domain).

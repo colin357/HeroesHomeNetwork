@@ -99,6 +99,24 @@
       window.addEventListener('hashchange', applyHash);
     }
 
+    // US map tooltip (states index)
+    var usMap = document.querySelector('.us-map');
+    if (usMap) {
+      var tip = document.createElement('div');
+      tip.className = 'map-tip';
+      document.body.appendChild(tip);
+      usMap.addEventListener('mousemove', function (e) {
+        var st = e.target.closest('.st');
+        if (!st) { tip.classList.remove('show'); return; }
+        tip.innerHTML = st.getAttribute('data-name') +
+          (st.classList.contains('on') ? '<small>Click to open the PCS guide</small>' : '<small>Call (719) 259-2246</small>');
+        tip.style.left = e.clientX + 'px';
+        tip.style.top = e.clientY + 'px';
+        tip.classList.add('show');
+      });
+      usMap.addEventListener('mouseleave', function () { tip.classList.remove('show'); });
+    }
+
     // Reveal-on-scroll: tag common blocks, then observe
     if (!reduceMotion && 'IntersectionObserver' in window) {
       var targets = document.querySelectorAll(
