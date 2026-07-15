@@ -11,6 +11,10 @@
 <meta property="og:description" content="State-by-state PCS guides, VA loan expertise, and a BAH calculator built for military families.">
 <meta property="og:url" content="https://heroeshomenetwork.com/">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
 <link rel="stylesheet" href="/css/style.css">
 <script type="application/ld+json">
 {
@@ -38,8 +42,9 @@
 <header class="site">
   <div class="nav-wrap">
     <a class="logo" href="/">
-      <strong>Heroes <span class="star">★</span> Home Network</strong>
-      <span>PCS. VA Loans. Home.</span>
+      <img src="/assets/logo.svg" alt="Heroes Home Network logo" width="46" height="46">
+      <div><strong>Heroes Home Network</strong>
+      <span>PCS &bull; VA Loans &bull; Home</span></div>
     </a>
     <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
     <nav class="main">
@@ -58,14 +63,53 @@
 <main>
 <section class="hero">
   <div class="container">
-    <div class="eyebrow">The Veteran PCS &amp; Home Buying Network</div>
-    <h1>Your next duty station.<br>Your next home.</h1>
-    <p class="lead">PCS orders don't have to mean starting from scratch. Heroes Home Network gives veterans and active-duty military families everything they need to buy a home at their next duty station — state relocation guides, VA loan expertise, and free military housing tools.</p>
-    <div class="hero-cta">
-      <a class="btn btn-red" href="/states/">Explore Your Next State →</a>
-      <a class="btn btn-white" href="/va-loan-guide.html">Start Your VA Loan</a>
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow hero-up">The Veteran PCS &amp; Home Buying Network</div>
+        <h1 class="hero-up d1">Your next duty station.<br><span class="accent">Your next home.</span></h1>
+        <p class="lead hero-up d2">PCS orders don't have to mean starting from scratch. Heroes Home Network gives veterans and active-duty military families everything they need to buy a home at their next duty station — state relocation guides, VA loan expertise, and free military housing tools.</p>
+        <div class="hero-cta hero-up d3">
+          <a class="btn btn-red" href="/states/">Explore Your Next State →</a>
+          <a class="btn btn-white" href="/va-loan-guide.html">Start Your VA Loan</a>
+        </div>
+        <p class="sub hero-up d4"><span class="stars">★★★★★</span> One mission: get your family home.</p>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 520 420" xmlns="http://www.w3.org/2000/svg" class="float">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#1f3f66"/><stop offset="1" stop-color="#0e2036"/>
+            </linearGradient>
+            <linearGradient id="house" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e9e4d8"/>
+            </linearGradient>
+            <linearGradient id="roof" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#c8102e"/><stop offset="1" stop-color="#8d0b20"/>
+            </linearGradient>
+          </defs>
+          <rect x="10" y="10" width="500" height="400" rx="28" fill="url(#sky)" stroke="rgba(255,255,255,.12)"/>
+          <circle cx="420" cy="80" r="34" fill="#c9a227" opacity=".85"/>
+          <circle cx="420" cy="80" r="46" fill="#c9a227" opacity=".18"/>
+          <path d="M60 330h400" stroke="rgba(255,255,255,.25)" stroke-width="2"/>
+          <path d="M90 340c40-12 90-12 130 0M300 342c40-10 90-10 130 0" stroke="rgba(255,255,255,.12)" stroke-width="2" fill="none"/>
+          <!-- house -->
+          <rect x="150" y="210" width="220" height="120" fill="url(#house)" rx="4"/>
+          <path d="M130 215 260 115l130 100z" fill="url(#roof)"/>
+          <rect x="238" y="255" width="44" height="75" rx="3" fill="#16304e"/>
+          <circle cx="273" cy="295" r="3" fill="#c9a227"/>
+          <rect x="172" y="240" width="42" height="38" rx="3" fill="#9db7d4"/>
+          <rect x="306" y="240" width="42" height="38" rx="3" fill="#9db7d4"/>
+          <path d="M172 259h42M193 240v38M306 259h42M327 240v38" stroke="#16304e" stroke-width="2.5"/>
+          <!-- flag -->
+          <path d="M338 132v-62" stroke="#e9e4d8" stroke-width="4" stroke-linecap="round"/>
+          <path d="M340 72h56l-10 12 10 12h-56z" fill="#c8102e"/>
+          <!-- star over door -->
+          <path d="M260 228l3 6.2 6.8 1-4.9 4.8 1.1 6.8-6-3.2-6 3.2 1.1-6.8-4.9-4.8 6.8-1z" fill="#c8102e"/>
+        </svg>
+        <div class="hero-badge b1"><strong>$0 Down</strong>VA Loan Benefit</div>
+        <div class="hero-badge b2"><strong>All 50 States</strong>PCS Guides &amp; Lending</div>
+      </div>
     </div>
-    <p class="sub">One mission: get your family home.</p>
   </div>
 </section>
 
@@ -78,16 +122,19 @@
     </div>
     <div class="grid cols-3">
       <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20l-6-3V4l6 3 6-3 6 3v13l-6-3-6 3z"/><path d="M9 7v13M15 4v13"/></svg></div>
         <h3>Research Your New State</h3>
         <p>Cost of living, property taxes, veteran benefits, school districts, and housing markets near every major installation — broken down state by state.</p>
         <a class="card-link" href="/states/">Browse PCS State Guides →</a>
       </div>
       <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-7h6v7"/></svg></div>
         <h3>Get VA Loan Ready</h3>
         <p>$0 down. No PMI. Competitive rates. Learn how the VA loan works, what you're entitled to, and how to get pre-approved before you arrive.</p>
         <a class="card-link" href="/va-loan-guide.html">Read the VA Loan Guide →</a>
       </div>
       <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2.5" width="16" height="19" rx="2"/><path d="M8 7h8M8 11h3M13 11h3M8 15h3M13 15h3M8 19h8"/></svg></div>
         <h3>Know Your Housing Budget</h3>
         <p>Your Basic Allowance for Housing can cover most or all of a mortgage payment. Estimate your BAH and see what it buys at your next duty station.</p>
         <a class="card-link" href="/bah-calculator.html">Use the BAH Calculator →</a>
@@ -167,7 +214,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <strong>Heroes <span class="star">★</span> Home Network</strong>
+        <div class="f-logo"><img src="/assets/logo.svg" alt="" width="44" height="44"><strong>Heroes Home Network</strong></div>
         <p>Helping veterans and military families research their next duty station, use their VA loan benefit, and buy a home in all 50 states.</p>
         <p style="margin-top:.8rem"><a href="tel:+17192592246">(719) 259-2246</a></p>
         <div class="eho">🏠 Equal Housing Opportunity</div>
