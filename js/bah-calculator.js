@@ -7,7 +7,7 @@
 
   var STATIONS = [
     { name: 'Colorado Springs, CO', bases: 'Fort Carson, Peterson SFB, Schriever SFB, USAFA', e5: 2391 },
-    { name: 'Killeen, TX', bases: 'Fort Cavazos', e5: 1653 },
+    { name: 'Killeen, TX', bases: 'Fort Hood', e5: 1653 },
     { name: 'El Paso, TX', bases: 'Fort Bliss', e5: 1449 },
     { name: 'San Antonio, TX', bases: 'JBSA: Lackland, Randolph, Fort Sam Houston', e5: 2064 },
     { name: 'Corpus Christi, TX', bases: 'NAS Corpus Christi', e5: 1743 },
@@ -23,7 +23,7 @@
     { name: 'Fort Walton Beach / Destin, FL', bases: 'Eglin AFB, Hurlburt Field', e5: 2337 },
     { name: 'Pensacola, FL', bases: 'NAS Pensacola', e5: 1938 },
     { name: 'Jacksonville, FL', bases: 'NAS Jacksonville, NS Mayport', e5: 2031 },
-    { name: 'Columbus, GA', bases: 'Fort Moore', e5: 1587 },
+    { name: 'Columbus, GA', bases: 'Fort Benning', e5: 1587 },
     { name: 'Savannah / Hinesville, GA', bases: 'Fort Stewart, Hunter AAF', e5: 1998 },
     { name: 'Augusta, GA', bases: 'Fort Eisenhower', e5: 1614 },
     { name: 'Warner Robins, GA', bases: 'Robins AFB', e5: 1443 },
