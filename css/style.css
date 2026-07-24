@@ -865,6 +865,114 @@ details.faq p { color: var(--gray); font-size: .96rem; }
 .calc .result small { color: #8fa2ba; font-size: .8rem; line-height: 1.5; display: block; }
 
 /* --------------------------------------------------------------------------
+   VA loan class landing page (dark funnel)
+   -------------------------------------------------------------------------- */
+body.dark-page { background: #0a1220; color: #e6ebf2; }
+.class-hero {
+  position: relative;
+  padding: 110px 0 90px;
+  overflow: hidden;
+  background:
+    radial-gradient(900px 500px at 50% -20%, rgba(56, 103, 158, .35), transparent 60%),
+    linear-gradient(160deg, #0a1220, #0c1a2e 60%, #0e2036);
+}
+.class-hero h1 { color: #fff; font-size: clamp(2.2rem, 5vw, 3.6rem); }
+.class-hero h1 .accent {
+  background: linear-gradient(100deg, var(--gold-soft), var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.class-hero p.lead { color: #aeb9c9; max-width: 620px; margin: 1.4rem auto 2rem; font-size: 1.12rem; }
+.class-chip {
+  display: inline-block;
+  padding: 8px 20px;
+  border: 1px solid rgba(201, 162, 39, .45);
+  border-radius: 999px;
+  color: var(--gold-soft);
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  margin-bottom: 1.6rem;
+  background: rgba(201, 162, 39, .08);
+}
+.class-when {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 2.2rem;
+}
+.class-when span {
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: .92rem;
+  font-weight: 600;
+  color: #dbe3ee;
+}
+.dark-band { background: #0a1220; }
+.dark-band .section-head h2 { color: #fff; }
+.dark-band .section-head p { color: #8fa0b5; }
+.dark-band h2 { color: #fff; }
+.alt-dark { background: #0d1727; }
+.card.dark-card {
+  background: #101d31;
+  border-color: rgba(255, 255, 255, .08);
+  box-shadow: none;
+}
+.card.dark-card h3 { color: #fff; font-size: 1.05rem; }
+.card.dark-card p { color: #8fa0b5; font-size: .9rem; }
+.card.dark-card:hover { box-shadow: 0 20px 44px rgba(0, 0, 0, .45); }
+.class-dates { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
+.class-date {
+  background: #101d31;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: var(--r-md);
+  padding: 24px 34px;
+  text-align: center;
+  min-width: 130px;
+}
+.class-date strong { display: block; font-family: "Fraunces", Georgia, serif; font-size: 1.6rem; color: var(--gold-soft); }
+.class-date span { display: block; color: #8fa0b5; font-size: .9rem; }
+.class-date small { display: block; margin-top: .5rem; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: #64748b; }
+.class-date.next { border-color: rgba(201, 162, 39, .5); box-shadow: 0 12px 30px rgba(0, 0, 0, .4); }
+.class-date.next small { color: var(--gold-soft); }
+.calc.dark-form {
+  background: #101d31;
+  border-color: rgba(255, 255, 255, .1);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .5);
+}
+.calc.dark-form h2, .calc.dark-form label { color: #fff; }
+.calc.dark-form input {
+  background: #0a1220;
+  border-color: rgba(255, 255, 255, .14);
+  color: #e6ebf2;
+}
+.calc.dark-form input::placeholder { color: #4d5a6d; }
+.calc.dark-form input:focus { border-color: var(--gold); background: #0a1220; box-shadow: 0 0 0 4px rgba(201, 162, 39, .12); }
+.calc.dark-form .calc-hint { color: #64748b; }
+.form-done { text-align: center; padding: 30px 0 10px; animation: resultIn .6s var(--ease); }
+.form-done .done-mark {
+  width: 64px; height: 64px;
+  margin: 0 auto 1.2rem;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #1d7a4f, #14532d);
+  color: #fff;
+  font-size: 1.9rem;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 14px 34px rgba(20, 83, 45, .5);
+}
+.form-done h3 { color: #fff; margin-bottom: .5rem; }
+.form-done p { color: #8fa0b5; }
+.form-error { margin-top: 16px; text-align: center; font-size: .9rem; color: #f1a1ae; }
+.form-error a { color: #fff; }
+.class-legal { font-size: .8rem; color: #64748b; line-height: 1.8; text-align: center; }
+body.dark-page footer.site { background: #060d17; }
+
+/* --------------------------------------------------------------------------
    CTA band
    -------------------------------------------------------------------------- */
 .cta-band {

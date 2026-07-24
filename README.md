@@ -42,3 +42,13 @@ new rates.
 
 The states index map is derived from Wikimedia Commons "Blank US Map
 (states only)" (public domain).
+
+## VA Loan Class signups (Twilio)
+
+`va-loan-class.html` posts signups to `/api/class-signup`
+(`api/class-signup.js`, a dependency-free Node serverless handler in the
+Vercel/Netlify style). It texts each signup to +1 (786) 788-2699 via
+Twilio's REST API. Set these environment variables in your hosting
+dashboard: `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`,
+`TWILIO_FROM_NUMBER`. Class dates (4th Tuesday monthly, 12:00 PM ET) are
+computed automatically in `js/class-signup.js`.
