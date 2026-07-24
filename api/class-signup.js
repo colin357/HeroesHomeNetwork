@@ -68,6 +68,10 @@ module.exports = async function handler(req, res) {
   } catch (err) {
     console.error('class-signup error:', err.message);
     res.statusCode = 500;
-    return res.end(JSON.stringify({ error: 'Failed to process signup' }));
+    res.setHeader('Content-Type', 'application/json');
+    const configMissing = /environment variables/.test(err.message);
+    return res.end(JSON.stringify({
+      error: configMissing ? 'twilio_not_configured' : 'send_failed',
+    }));
   }
 };

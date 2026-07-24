@@ -73,13 +73,26 @@
         classDate: LONG_MONTHS[dates[0].getMonth()] + ' ' + dates[0].getDate() + ', ' + dates[0].getFullYear()
       })
     }).then(function (r) {
-      if (!r.ok) throw new Error('bad status ' + r.status);
+      if (r.ok) return null;
+      return r.json().catch(function () { return {}; }).then(function (data) {
+        var err = new Error('bad status ' + r.status);
+        err.status = r.status;
+        err.code = data && data.error;
+        throw err;
+      });
+    }).then(function () {
       form.hidden = true;
       document.getElementById('form-done').hidden = false;
-    }).catch(function () {
+    }).catch(function (err) {
       btn.disabled = false;
       btn.textContent = 'Save My Spot';
-      errEl.textContent = 'Something went wrong sending your signup. Please try again, or call (719) 259-2246 and we’ll add you manually.';
+      var msg = 'Something went wrong sending your signup. Please try again, or call (719) 259-2246 and we’ll add you manually.';
+      if (err && err.code === 'twilio_not_configured') {
+        msg = 'Signup service isn’t configured yet (Twilio credentials missing on the server). Site admin: set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and TWILIO_FROM_NUMBER, then redeploy.';
+      } else if (err && err.status === 404) {
+        msg = 'Signup endpoint not found on this deployment (/api/class-signup returned 404). Site admin: confirm the api/ folder is deployed. Meanwhile, call (719) 259-2246 to sign up.';
+      }
+      errEl.textContent = msg;
       errEl.hidden = false;
     });
   });
