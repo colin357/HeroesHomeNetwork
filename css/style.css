@@ -1214,13 +1214,6 @@ a.when-link:hover { background: var(--red); border-color: var(--red); color: #ff
 }
 .diff-statement strong { color: var(--red); font-weight: 700; }
 .dark-band .diff-statement, .stats .diff-statement { color: #fff; }
-.diff-statement + .diff-sub {
-  max-width: 720px;
-  margin: 1.6rem auto 0;
-  text-align: center;
-  color: var(--gray);
-  font-size: 1.02rem;
-}
 
 .check-list { list-style: none; max-width: 780px; margin: 0 auto; }
 .check-list li {
