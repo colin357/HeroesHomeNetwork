@@ -52,3 +52,32 @@ Twilio's REST API. Set these environment variables in your hosting
 dashboard: `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`,
 `TWILIO_FROM_NUMBER`. Class dates (4th Tuesday monthly, 12:00 PM ET) are
 computed automatically in `js/class-signup.js`.
+
+## Lead capture (Twilio)
+
+Every capture point on the site posts to `/api/lead` (`api/lead.js`) and texts
+the lead to the same number using the same three Twilio environment variables
+above. `js/lead-capture.js` drives all of them from one delegated submit
+handler — include it after `js/main.js` on any page with a capture form.
+
+| Page | Form (`data-source`) | Fields | Offer |
+|---|---|---|---|
+| `index.html#pre-approval` | `pre-approval` | name, email, phone, target base/state (all required) | Pre-approval + agent match |
+| `bah-calculator.html` | `bah-calculator` | name, email, phone (optional) | Personalized BAH breakdown + PCS checklist |
+| `states/*.html#get-packet` | `state-guide` | name, email, base/city + phone (optional) | State PCS packet + checklist |
+| `pcs-checklist.html#get-checklist` | `pcs-checklist` | name, email, base/state + phone (optional) | Printable checklist PDF + VA document list |
+
+The calculator's capture is hidden until an estimate renders; `js/bah-calculator.js`
+then reveals it and writes the live estimate into the form's `data-context` so the
+notification text includes the duty station, pay grade, and dollar amount the
+visitor was looking at. Phone is mandatory only on the pre-approval form —
+enforced client-side via `data-require-phone` and server-side in `api/lead.js`.
+
+Markup contract for adding a capture point to a new page: a `.lead-block
+.lead-capture` wrapper containing a `form.lead-form` (with `data-source`,
+`data-offer`, and optional `data-location`), inputs tagged
+`data-field="name|email|phone|location"`, a sibling `.form-done` block, and a
+sibling `.form-error` paragraph — both `hidden`.
+
+Fulfillment of the emailed offers (BAH breakdown, state packets, checklist PDF)
+is manual today; the endpoint only delivers the notification text.

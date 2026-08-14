@@ -198,15 +198,36 @@
     calc();
   });
 
+  /* ---------- email capture on the results screen ---------- */
+  var captureEl = document.getElementById('bah-capture');
+  var captureStationEl = document.getElementById('bah-capture-station');
+  var captureForm = captureEl ? captureEl.querySelector('.lead-form') : null;
+
+  // Reveal the capture alongside the result and keep the lead payload in sync
+  // with whatever estimate the visitor is currently looking at.
+  function syncCapture(rate) {
+    if (!captureEl) return;
+    if (!state.station) { captureEl.hidden = true; return; }
+    captureEl.hidden = false;
+    if (captureStationEl) captureStationEl.textContent = state.station.name;
+    if (captureForm) {
+      captureForm.setAttribute('data-location', state.station.name);
+      captureForm.setAttribute('data-context',
+        'Estimate: $' + rate.toLocaleString('en-US') + '/mo — ' + state.grade + ' ' +
+        (state.withDeps ? 'with' : 'without') + ' dependents at ' + state.station.name);
+    }
+  }
+
   /* ---------- live result ---------- */
   function calc() {
-    if (!state.station) { resultEl.classList.remove('show'); return; }
+    if (!state.station) { resultEl.classList.remove('show'); syncCapture(0); return; }
     var rate = Math.round(state.station.e5 * state.mult * (state.withDeps ? 1 : WITHOUT_DEP_FACTOR));
     document.getElementById('amount').textContent = '$' + rate.toLocaleString('en-US') + '/mo';
     document.getElementById('detail').textContent =
       state.grade + ' ' + (state.withDeps ? 'with' : 'without') + ' dependents — ' + state.station.name +
       '. Estimate only; verify your exact rate at the official DoD BAH lookup.';
     resultEl.classList.add('show');
+    syncCapture(rate);
   }
 
   renderGradePills();

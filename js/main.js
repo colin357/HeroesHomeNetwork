@@ -122,7 +122,8 @@
       var targets = document.querySelectorAll(
         '.section-head, .card, .step, .prose > h2, .prose > p, .prose > ul, ' +
         '.prose > ol, .prose > details, .prose > .note, .prose > .table-wrap, ' +
-        '.calc, .stats .grid > div, .cta-band h2, .cta-band p, .cta-band .btn'
+        '.calc, .stats .grid > div, .cta-band h2, .cta-band p, .cta-band .btn, ' +
+        '.lead-capture:not(.inline), .diff-statement, .diff-sub, .check-list > li'
       );
       targets.forEach(function (el) { el.classList.add('reveal'); });
 
