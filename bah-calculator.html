@@ -99,6 +99,34 @@
         <small id="detail"></small>
       </div>
       <p class="calc-hint" id="calc-hint">Pick a duty station to see your estimate — it updates live as you change options.</p>
+      <div class="lead-block lead-capture inline" id="bah-capture" hidden>
+        <h3>Want the full breakdown?</h3>
+        <p class="lead-intro">We'll email you a personalized BAH breakdown for <span id="bah-capture-station">your duty station</span> — what your estimate buys at current rates, the mortgage payment it supports with $0 down, and our PCS home buying checklist with the dates that matter.</p>
+        <form class="lead-form" data-source="bah-calculator" data-offer="Personalized BAH breakdown + PCS checklist" novalidate>
+          <div class="lead-fields">
+            <div>
+              <label for="bc-name">Full Name</label>
+              <input id="bc-name" data-field="name" type="text" autocomplete="name" placeholder="Jane Doe" required>
+            </div>
+            <div>
+              <label for="bc-email">Email</label>
+              <input id="bc-email" data-field="email" type="email" autocomplete="email" placeholder="jane@email.com" required>
+            </div>
+            <div class="full">
+              <label for="bc-phone">Phone <span class="opt">(optional — only if you'd rather we call)</span></label>
+              <input id="bc-phone" data-field="phone" type="tel" autocomplete="tel" placeholder="(555) 123-4567">
+            </div>
+          </div>
+          <button class="btn btn-red" type="submit" data-sending="Sending…">Email My Breakdown</button>
+          <p class="lead-note">One email with your breakdown and the checklist. No spam, unsubscribe anytime.</p>
+        </form>
+        <div class="form-done" hidden>
+          <div class="done-mark">✓</div>
+          <h3>On its way.</h3>
+          <p>Check your inbox for your BAH breakdown and the PCS checklist. If anything looks off, call <a href="tel:+17192592246">(719) 259-2246</a> and we'll walk through it.</p>
+        </div>
+        <p class="form-error" hidden></p>
+      </div>
     </div>
     <p class="center" style="max-width:640px;margin:1.4rem auto 0;font-size:.82rem;color:var(--gray)">
       Estimates are based on representative published BAH rates and are for planning purposes only. Your exact rate is set by the Department of Defense by ZIP code, pay grade, and dependency status — verify at the official <a href="https://www.travel.dod.mil/Allowances/Basic-Allowance-for-Housing/" rel="noopener">DoD BAH rate lookup</a>.
@@ -134,8 +162,9 @@
 <section class="cta-band">
   <div class="container">
     <h2>See what your BAH can buy.</h2>
-    <p>A VA loan specialist can turn your BAH estimate into a real pre-approval in about a day.</p>
-    <a class="btn btn-white" href="tel:+17192592246">Call (719) 259-2246</a>
+    <p>A VA loan specialist can turn your BAH estimate into a real pre-approval in about a day — then we match you with a vetted agent at your next duty station.</p>
+    <a class="btn btn-white" href="/#pre-approval">Start Pre-Approval</a>
+    <p style="margin:1.4rem 0 0;font-size:.95rem">Or call <a href="tel:+17192592246" style="color:#fff;font-weight:700">(719) 259-2246</a></p>
   </div>
 </section>
 </main>
@@ -181,6 +210,7 @@
   </div>
 </footer>
 <script src="/js/main.js"></script>
+<script src="/js/lead-capture.js"></script>
 <script src="/js/bah-calculator.js"></script>
 </body>
 </html>

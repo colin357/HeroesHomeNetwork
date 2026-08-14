@@ -965,10 +965,14 @@ body.dark-page { background: #0a1220; color: #e6ebf2; }
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 14px 34px rgba(20, 83, 45, .5);
 }
-.form-done h3 { color: #fff; margin-bottom: .5rem; }
-.form-done p { color: #8fa0b5; }
-.form-error { margin-top: 16px; text-align: center; font-size: .9rem; color: #f1a1ae; }
-.form-error a { color: #fff; }
+.form-done h3 { color: var(--navy); margin-bottom: .5rem; }
+.form-done p { color: var(--gray); }
+.form-error { margin-top: 16px; text-align: center; font-size: .9rem; color: var(--red); }
+.form-error a { color: var(--navy); font-weight: 700; }
+body.dark-page .form-done h3 { color: #fff; }
+body.dark-page .form-done p { color: #8fa0b5; }
+body.dark-page .form-error { color: #f1a1ae; }
+body.dark-page .form-error a { color: #fff; }
 .class-legal { font-size: .8rem; color: #64748b; line-height: 1.8; text-align: center; }
 body.dark-page footer.site { background: #060d17; }
 
@@ -1164,3 +1168,144 @@ footer.site a:hover { color: #fff; }
   font-size: .72rem;
   font-weight: 700;
 }
+
+/* --------------------------------------------------------------------------
+   Five-step "How It Works" row
+   -------------------------------------------------------------------------- */
+.grid.cols-5 { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 1100px) { .grid.cols-5 { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 780px) { .grid.cols-5 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .grid.cols-5 { grid-template-columns: 1fr; } }
+.step .n.n-gold { background: linear-gradient(145deg, var(--gold), #a9871c); box-shadow: 0 10px 24px rgba(201, 162, 39, .32); }
+/* Timing chips sit on a shared baseline even when the copy runs long */
+.grid.cols-5 .step { display: flex; flex-direction: column; align-items: flex-start; }
+.grid.cols-5 .step p { flex: 1 0 auto; margin-bottom: 1.1rem; }
+.step .when {
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+a.when-link {
+  text-decoration: none;
+  transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+}
+a.when-link:hover { background: var(--red); border-color: var(--red); color: #fff; }
+
+/* --------------------------------------------------------------------------
+   Differentiator statement + agent vetting standard
+   -------------------------------------------------------------------------- */
+.diff-statement {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(1.3rem, 2.5vw, 1.85rem);
+  line-height: 1.42;
+  letter-spacing: -.01em;
+  color: var(--navy);
+}
+.diff-statement strong { color: var(--red); font-weight: 700; }
+.dark-band .diff-statement, .stats .diff-statement { color: #fff; }
+.diff-statement + .diff-sub {
+  max-width: 720px;
+  margin: 1.6rem auto 0;
+  text-align: center;
+  color: var(--gray);
+  font-size: 1.02rem;
+}
+
+.check-list { list-style: none; max-width: 780px; margin: 0 auto; }
+.check-list li {
+  position: relative;
+  padding: 0 0 0 42px;
+  margin-bottom: 1.15rem;
+  color: #38414e;
+  font-size: .99rem;
+}
+.check-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0; top: 1px;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--navy), var(--navy-3));
+  color: var(--gold-soft);
+  font-size: .8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.check-list li strong { color: var(--navy); }
+
+/* --------------------------------------------------------------------------
+   Lead capture forms (pre-approval, BAH breakdown, guides, checklist)
+   -------------------------------------------------------------------------- */
+.lead-capture {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 40px;
+  max-width: 720px;
+  margin: 0 auto;
+  box-shadow: var(--shadow-lg);
+}
+.lead-capture > h2, .lead-capture > h3 { text-align: center; color: var(--navy); }
+.lead-capture > p.lead-intro {
+  text-align: center;
+  color: var(--gray);
+  font-size: .96rem;
+  margin: .7rem auto 1.6rem;
+  max-width: 520px;
+}
+.lead-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.lead-fields .full { grid-column: 1 / -1; }
+.lead-fields label {
+  display: block;
+  font-weight: 650;
+  font-size: .8rem;
+  letter-spacing: .03em;
+  margin-bottom: 7px;
+  color: var(--navy);
+}
+.lead-fields .opt { color: var(--gray-light); font-weight: 500; letter-spacing: 0; }
+.lead-form input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  font-size: 1rem;
+  font-family: inherit;
+  background: var(--cream);
+  color: var(--ink);
+  transition: border-color .25s, box-shadow .25s, background .25s;
+}
+.lead-form input:focus {
+  outline: none;
+  border-color: var(--navy);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(14, 32, 54, .08);
+}
+.lead-form button[type="submit"] { width: 100%; margin-top: 22px; }
+.lead-form .lead-note { margin-top: 16px; text-align: center; font-size: .82rem; color: var(--gray); }
+@media (max-width: 560px) { .lead-fields { grid-template-columns: 1fr; } .lead-capture { padding: 26px 22px; } }
+
+/* Inline variant — sits inside the calculator card under the result */
+.lead-capture.inline {
+  background: var(--cream);
+  box-shadow: none;
+  border-radius: var(--r-md);
+  padding: 28px;
+  max-width: none;
+  margin-top: 24px;
+}
+.lead-capture.inline h3 { font-size: 1.12rem; }
+.lead-capture.inline .lead-form input { background: #fff; }
+.lead-capture[hidden] { display: none; }
