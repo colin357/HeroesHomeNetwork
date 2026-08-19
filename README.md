@@ -12,7 +12,7 @@ buy a home — in all 50 states.
 |---|---|
 | `index.html` | Homepage — value proposition, how it works, popular PCS states, FAQ |
 | `va-loan-guide.html` | Complete VA loan guide (eligibility, entitlement, funding fee, process, FAQ) |
-| `bah-calculator.html` | Interactive BAH estimator by duty station / pay grade / dependents |
+| `bah-calculator.html` | BAH lookup by duty station / pay grade / dependents, using the published DoD rate table |
 | `pcs-checklist.html` | Timeline-based PCS home buying checklist |
 | `resources.html` | Curated official veteran resources |
 | `states/` | State-by-state PCS guides (TX, VA, CO, NC, FL, GA + index) |
@@ -36,9 +36,25 @@ python3 -m http.server 8080
 Canonical URLs assume the production domain `https://heroeshomenetwork.com`;
 update canonicals and `sitemap.xml` if deploying under a different domain.
 
-The BAH calculator (`js/bah-calculator.js`) uses representative rates for
-planning estimates only; update the anchor table annually when DoD publishes
-new rates.
+The BAH calculator serves exact published rates, not estimates. `js/bah-rates-2026.js`
+holds the DoD 2026 BAH table — all 299 stateside military housing areas (MHAs) for
+every pay grade, with and without dependents — plus the map of installations to
+MHAs that powers the duty station search. `js/bah-calculator.js` only looks values
+up in that table.
+
+Regenerate the data file when DoD publishes the next rate year:
+
+```
+python3 tools/build-bah-rates.py --year 2027 \
+  --with-url <2027 with-dependents rate table PDF> \
+  --without-url <2027 without-dependents rate table PDF>
+```
+
+Then point `bah-calculator.html` at the new `js/bah-rates-<year>.js` and update the
+year references in the page copy. The script re-checks the invariants (24 grades per
+row, E-1 through E-4 equal, with-dependents >= without-dependents) before writing.
+Two base guides — Arnold AFB and NAS Kingsville — sit in county cost groups rather
+than a named MHA, so they are intentionally absent from the picker.
 
 The states index map is derived from Wikimedia Commons "Blank US Map
 (states only)" (public domain).
@@ -67,8 +83,8 @@ handler — include it after `js/main.js` on any page with a capture form.
 | `states/*.html#get-packet` | `state-guide` | name, email, base/city + phone (optional) | State PCS packet + checklist |
 | `pcs-checklist.html#get-checklist` | `pcs-checklist` | name, email, base/state + phone (optional) | Printable checklist PDF + VA document list |
 
-The calculator's capture is hidden until an estimate renders; `js/bah-calculator.js`
-then reveals it and writes the live estimate into the form's `data-context` so the
+The calculator's capture is hidden until a rate renders; `js/bah-calculator.js`
+then reveals it and writes the live rate into the form's `data-context` so the
 notification text includes the duty station, pay grade, and dollar amount the
 visitor was looking at. Phone is mandatory only on the pre-approval form —
 enforced client-side via `data-require-phone` and server-side in `api/lead.js`.

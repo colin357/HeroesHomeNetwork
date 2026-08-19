@@ -837,6 +837,7 @@ details.faq p { color: var(--gray); font-size: .96rem; }
 .pills .pill:hover { border-color: var(--navy); transform: translateY(-1px); }
 .pills .pill.active { background: var(--red); border-color: var(--red); color: #fff; }
 .calc-hint { margin-top: 20px; text-align: center; font-size: .85rem; color: var(--gray); }
+.calc .calc-note { margin: 10px 0 0; font-size: .78rem; line-height: 1.5; color: var(--gray); }
 .calc .result.show + .calc-hint, .calc .result.show ~ .calc-hint { display: none; }
 
 .calc .seg button, .calc .pills .pill { width: auto; margin-top: 0; }
