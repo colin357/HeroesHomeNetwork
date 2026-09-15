@@ -1047,9 +1047,9 @@ footer.site a:hover { color: #fff; }
   .hero-badge.b1 { left: 2%; }
   .hero-badge.b2 { right: 2%; }
 }
-@media (max-width: 900px) {
-  .grid.cols-3, .grid.cols-4 { grid-template-columns: repeat(2, 1fr); }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
+/* Header collapses to the hamburger menu below 1100px: six links plus two
+   CTAs do not fit on tablets and small laptops. */
+@media (max-width: 1100px) {
   nav.main {
     display: none;
     position: absolute;
@@ -1067,6 +1067,10 @@ footer.site a:hover { color: #fff; }
   nav.main a { display: block; padding: 12px 14px; border-radius: 10px; }
   .nav-toggle { display: block; }
   .nav-cta { display: none; }
+}
+@media (max-width: 900px) {
+  .grid.cols-3, .grid.cols-4 { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
   .hero { padding: 90px 0 120px; }
   section.band { padding: 72px 0; }
 }
@@ -1309,3 +1313,67 @@ a.when-link:hover { background: var(--red); border-color: var(--red); color: #ff
 .lead-capture.inline h3 { font-size: 1.12rem; }
 .lead-capture.inline .lead-form input { background: #fff; }
 .lead-capture[hidden] { display: none; }
+
+/* --------------------------------------------------------------------------
+   Join the Network — header button + modal application form for agents
+   -------------------------------------------------------------------------- */
+.nav-join { padding: 10px 18px; font-size: .8rem; }
+.nav-join-mobile { display: none; }
+@media (max-width: 1400px) {
+  .nav-join { display: none; }
+  .nav-join-mobile { display: block; }
+  nav.main a { padding: 9px 10px; font-size: .86rem; }
+  .nav-wrap { gap: 18px; }
+}
+@media (max-width: 1100px) { .nav-join-mobile { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 6px; } }
+
+body.join-open { overflow: hidden; }
+.join-modal { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.join-modal[hidden] { display: none; }
+.join-backdrop { position: absolute; inset: 0; background: rgba(8, 16, 28, .62); backdrop-filter: blur(6px); opacity: 0; transition: opacity .22s var(--ease); }
+.join-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  background: #fff;
+  border-radius: var(--r);
+  box-shadow: var(--shadow-lg);
+  padding: 40px;
+  opacity: 0;
+  transform: translateY(14px) scale(.98);
+  transition: opacity .22s var(--ease), transform .28s var(--ease);
+}
+.join-modal.show .join-backdrop { opacity: 1; }
+.join-modal.show .join-dialog { opacity: 1; transform: none; }
+.join-dialog .eyebrow { justify-content: center; display: flex; }
+.join-dialog h2 { text-align: center; color: var(--navy); margin-top: .4rem; }
+.join-intro { text-align: center; color: var(--gray); font-size: .95rem; margin: .7rem auto 1.5rem; max-width: 480px; }
+.join-close {
+  position: absolute; top: 12px; right: 14px;
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 0; background: rgba(14, 32, 54, .06); color: var(--navy);
+  font-size: 1.5rem; line-height: 1; cursor: pointer;
+  transition: background .25s var(--ease);
+}
+.join-close:hover { background: rgba(14, 32, 54, .12); }
+.lead-form select, .lead-form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  font-size: 1rem;
+  font-family: inherit;
+  background: var(--cream);
+  color: var(--ink);
+  transition: border-color .25s, box-shadow .25s, background .25s;
+}
+.lead-form textarea { resize: vertical; min-height: 90px; }
+.lead-form select:focus, .lead-form textarea:focus {
+  outline: none; border-color: var(--navy); background: #fff;
+  box-shadow: 0 0 0 4px rgba(14, 32, 54, .08);
+}
+.join-dialog .form-done { text-align: center; padding: 10px 0; }
+.join-dialog .form-error { margin-top: 14px; }
+@media (max-width: 560px) { .join-dialog { padding: 28px 20px; } }

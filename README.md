@@ -15,6 +15,7 @@ buy a home — in all 50 states.
 | `bah-calculator.html` | Interactive BAH estimator by duty station / pay grade / dependents |
 | `pcs-checklist.html` | Timeline-based PCS home buying checklist |
 | `resources.html` | Curated official veteran resources |
+| `about.html` | About page — what the network is and is not, how it helps, values, disclosure |
 | `states/` | State-by-state PCS guides (TX, VA, CO, NC, FL, GA + index) |
 | `404.html` | Not-found page |
 

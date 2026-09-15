@@ -18,6 +18,7 @@ const SOURCE_LABELS = {
   'bah-calculator': 'BAH breakdown request',
   'state-guide': 'State guide lead',
   'pcs-checklist': 'PCS checklist request',
+  'agent-join': 'AGENT APPLICATION (join the network)',
 };
 
 async function sendLeadText({ name, email, phone, location, source, context, offer }) {
@@ -72,7 +73,7 @@ module.exports = async function handler(req, res) {
     const phone = clean(data.phone, 40);
     const location = clean(data.location, 80);
     const source = clean(data.source, 40);
-    const context = clean(data.context, 200);
+    const context = clean(data.context, 400);
     const offer = clean(data.offer, 120);
     // Phone is required only on the pre-approval form; the content offers ask
     // for it optionally so the email step stays low friction.
