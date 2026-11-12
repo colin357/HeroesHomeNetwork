@@ -1,0 +1,28 @@
+PAGE PATH:   /nas-fort-worth-jrb
+OLD URL:     https://heroeshomenetwork.com/bases/nas-fort-worth-jrb.html
+PAGE TITLE:  NAS JRB Fort Worth | Military Installation Guide | Heroes Home Network
+DESCRIPTION: PCSing to NAS JRB Fort Worth? Neighborhoods, schools, things to do, and housing near NAS JRB Fort Worth in Fort Worth, Texas. Your military relocation guide.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "NAS JRB Fort Worth: Military Installation Guide",
+  "description": "PCSing to NAS JRB Fort Worth? Neighborhoods, schools, things to do, and housing near NAS JRB Fort Worth in Fort Worth, Texas. Your military relocation guide.",
+  "author": {"@type": "Organization", "name": "Heroes Home Network"},
+  "publisher": {"@type": "Organization", "name": "Heroes Home Network", "url": "https://heroeshomenetwork.com/"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://heroeshomenetwork.com/"},
+    {"@type": "ListItem", "position": 2, "name": "Base Guides", "item": "https://heroeshomenetwork.com/bases"},
+    {"@type": "ListItem", "position": 3, "name": "NAS JRB Fort Worth", "item": "https://heroeshomenetwork.com/nas-fort-worth-jrb"}
+  ]
+}
+</script>

@@ -1,0 +1,8 @@
+PAGE PATH:   /404
+OLD URL:     https://heroeshomenetwork.com/404.html
+PAGE TITLE:  Page Not Found | Heroes Home Network
+DESCRIPTION: 
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+(none)

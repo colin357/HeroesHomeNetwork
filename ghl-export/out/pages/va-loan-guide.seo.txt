@@ -1,0 +1,19 @@
+PAGE PATH:   /va-loan-guide
+OLD URL:     https://heroeshomenetwork.com/va-loan-guide.html
+PAGE TITLE:  VA Loan Guide 2026: Eligibility, Benefits & How to Apply | Heroes Home Network
+DESCRIPTION: Complete 2026 VA loan guide for veterans and active-duty military: eligibility, $0 down benefits, funding fee, COE, entitlement, and step-by-step application process. Call (719) 259-2246.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "What credit score do I need for a VA loan?", "acceptedAnswer": {"@type": "Answer", "text": "The VA itself sets no minimum credit score. Most lenders look for a score around 580–620, but requirements vary and many work with lower scores given strong compensating factors."}},
+    {"@type": "Question", "name": "Is there a VA loan limit?", "acceptedAnswer": {"@type": "Answer", "text": "Veterans with full entitlement have no VA loan limit — the lender determines how much you qualify for. Limits only apply if you have reduced entitlement from an existing VA loan."}},
+    {"@type": "Question", "name": "What is the VA funding fee?", "acceptedAnswer": {"@type": "Answer", "text": "A one-time fee of roughly 1.25%–3.3% of the loan amount that keeps the program running. Veterans receiving VA disability compensation and eligible surviving spouses are exempt."}},
+    {"@type": "Question", "name": "Can I use BAH to qualify for a VA loan?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Lenders count Basic Allowance for Housing as effective income, and because BAH is non-taxable it can often be grossed up, increasing your qualifying power."}}
+  ]
+}
+</script>

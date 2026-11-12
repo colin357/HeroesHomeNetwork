@@ -1,0 +1,8 @@
+PAGE PATH:   /bases
+OLD URL:     https://heroeshomenetwork.com/bases/index.html
+PAGE TITLE:  Military Base Guides: Every Installation in One Place | Heroes Home Network
+DESCRIPTION: Comprehensive guides for every major U.S. military installation — neighborhoods, schools, things to do, and housing near Army, Air Force, Navy, Marine Corps, Coast Guard, and Joint bases.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+(none)

@@ -1,0 +1,28 @@
+PAGE PATH:   /coast-guard-base-new-orleans
+OLD URL:     https://heroeshomenetwork.com/bases/coast-guard-base-new-orleans.html
+PAGE TITLE:  Coast Guard Base New Orleans | Military Installation Guide | Heroes Home Network
+DESCRIPTION: PCSing to Coast Guard Base New Orleans? Neighborhoods, schools, things to do, and housing near Coast Guard Base New Orleans in New Orleans, Louisiana. Your military relocation guide.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Coast Guard Base New Orleans: Military Installation Guide",
+  "description": "PCSing to Coast Guard Base New Orleans? Neighborhoods, schools, things to do, and housing near Coast Guard Base New Orleans in New Orleans, Louisiana. Your military relocation guide.",
+  "author": {"@type": "Organization", "name": "Heroes Home Network"},
+  "publisher": {"@type": "Organization", "name": "Heroes Home Network", "url": "https://heroeshomenetwork.com/"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://heroeshomenetwork.com/"},
+    {"@type": "ListItem", "position": 2, "name": "Base Guides", "item": "https://heroeshomenetwork.com/bases"},
+    {"@type": "ListItem", "position": 3, "name": "Coast Guard Base New Orleans", "item": "https://heroeshomenetwork.com/coast-guard-base-new-orleans"}
+  ]
+}
+</script>

@@ -1,0 +1,33 @@
+PAGE PATH:   /about
+OLD URL:     https://heroeshomenetwork.com/about.html
+PAGE TITLE:  About Heroes Home Network | Veteran PCS & Home Buying Network
+DESCRIPTION: Who Heroes Home Network is, who we are not, and how our vetted network of veteran and military-spouse agents plus an in-house VA lender helps military families buy a home on a PCS timeline. Call (719) 259-2246.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "About Heroes Home Network",
+  "url": "https://heroeshomenetwork.com/about",
+  "description": "Who Heroes Home Network is, who we are not, and how our vetted network of veteran and military-spouse agents plus an in-house VA lender helps military families buy a home on a PCS timeline.",
+  "mainEntity": {
+    "@type": "Organization",
+    "name": "Heroes Home Network",
+    "url": "https://heroeshomenetwork.com/",
+    "telephone": "(719) 259-2246",
+    "areaServed": "United States"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://heroeshomenetwork.com/"},
+    {"@type": "ListItem", "position": 2, "name": "About", "item": "https://heroeshomenetwork.com/about"}
+  ]
+}
+</script>

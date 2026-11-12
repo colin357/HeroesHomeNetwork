@@ -1,0 +1,28 @@
+PAGE PATH:   /ohio
+OLD URL:     https://heroeshomenetwork.com/states/ohio.html
+PAGE TITLE:  PCSing to Ohio? Military Relocation & VA Loan Guide | Heroes Home Network
+DESCRIPTION: PCSing to Ohio? Your military relocation guide: major bases, veteran tax benefits, top school districts, weather, traffic, and how to buy a home in Ohio with a VA loan. Call (719) 259-2246.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "PCSing to Ohio: Military Relocation & VA Loan Guide",
+  "description": "Military pay and retirement are exempt from state income tax, anchored by one of the Air Force's largest bases at Wright-Patterson.",
+  "author": {"@type": "Organization", "name": "Heroes Home Network"},
+  "publisher": {"@type": "Organization", "name": "Heroes Home Network", "url": "https://heroeshomenetwork.com/"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://heroeshomenetwork.com/"},
+    {"@type": "ListItem", "position": 2, "name": "PCS State Guides", "item": "https://heroeshomenetwork.com/states"},
+    {"@type": "ListItem", "position": 3, "name": "Ohio", "item": "https://heroeshomenetwork.com/ohio"}
+  ]
+}
+</script>

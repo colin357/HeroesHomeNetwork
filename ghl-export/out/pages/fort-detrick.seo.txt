@@ -1,0 +1,28 @@
+PAGE PATH:   /fort-detrick
+OLD URL:     https://heroeshomenetwork.com/bases/fort-detrick.html
+PAGE TITLE:  Fort Detrick | Military Installation Guide | Heroes Home Network
+DESCRIPTION: PCSing to Fort Detrick? Neighborhoods, schools, things to do, and housing near Fort Detrick in Frederick, Maryland. Your military relocation guide.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Fort Detrick: Military Installation Guide",
+  "description": "PCSing to Fort Detrick? Neighborhoods, schools, things to do, and housing near Fort Detrick in Frederick, Maryland. Your military relocation guide.",
+  "author": {"@type": "Organization", "name": "Heroes Home Network"},
+  "publisher": {"@type": "Organization", "name": "Heroes Home Network", "url": "https://heroeshomenetwork.com/"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://heroeshomenetwork.com/"},
+    {"@type": "ListItem", "position": 2, "name": "Base Guides", "item": "https://heroeshomenetwork.com/bases"},
+    {"@type": "ListItem", "position": 3, "name": "Fort Detrick", "item": "https://heroeshomenetwork.com/fort-detrick"}
+  ]
+}
+</script>

@@ -1,0 +1,27 @@
+PAGE PATH:   /
+OLD URL:     https://heroeshomenetwork.com/
+PAGE TITLE:  Heroes Home Network | VA Loans & PCS Home Buying Help for Veterans
+DESCRIPTION: A vetted network of real estate agents who are veterans and military spouses, matched to you by location and connected in a group chat with your VA lender after pre-approval. Plus state PCS guides and a free BAH calculator. Call (719) 259-2246.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Heroes Home Network",
+  "url": "https://heroeshomenetwork.com/",
+  "telephone": "(719) 259-2246",
+  "description": "A veteran-focused home buying network helping military families PCS with confidence through VA loan expertise, state relocation guides, and free military housing tools.",
+  "areaServed": "United States",
+  "knowsAbout": ["VA loans", "PCS moves", "military relocation", "BAH", "veteran home buying"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Heroes Home Network",
+  "url": "https://heroeshomenetwork.com/"
+}
+</script>

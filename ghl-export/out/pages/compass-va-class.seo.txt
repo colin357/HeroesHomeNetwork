@@ -1,0 +1,23 @@
+PAGE PATH:   /compass-va-class
+OLD URL:     https://heroeshomenetwork.com/compass-va-class.html
+PAGE TITLE:  Free VA Loan Class for Compass Agents | Heroes Home Network
+DESCRIPTION: A free VA loan class built for Compass real estate agents. Tuesday, August 18 at 10:00 AM ET on Zoom. Stop losing military buyers to VA loan myths — save your spot.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "VA Loans for Compass Real Estate Agents",
+  "description": "Free online class for Compass agents teaching how VA loans actually work so they can win and serve more military buyers.",
+  "provider": {"@type": "Organization", "name": "Heroes Home Network", "url": "https://heroeshomenetwork.com/"},
+  "isAccessibleForFree": true,
+  "hasCourseInstance": {
+    "@type": "CourseInstance",
+    "courseMode": "online",
+    "startDate": "2026-08-18T10:00:00-04:00",
+    "location": {"@type": "VirtualLocation", "name": "Zoom"}
+  }
+}
+</script>

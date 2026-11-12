@@ -1,0 +1,8 @@
+PAGE PATH:   /resources
+OLD URL:     https://heroeshomenetwork.com/resources.html
+PAGE TITLE:  Veteran Resources: Housing, Benefits & PCS Tools | Heroes Home Network
+DESCRIPTION: Trusted resources for veterans and military families — VA benefits, housing assistance, disability compensation, PCS entitlements, and free tools like our BAH calculator.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+(none)

@@ -1,0 +1,930 @@
+<script>
+
+/* ==== HighLevel glue ==================================================== */
+/* PASTE YOUR HIGHLEVEL INBOUND WEBHOOK URL HERE (Automation > Workflows >
+   trigger "Inbound Webhook"). Every form on the site posts to it with a
+   "source" field: pre-approval, bah-calculator, state-guide, pcs-checklist,
+   agent-join, class-signup, compass-class. */
+var HHN_WEBHOOK_URL = 'PASTE_HIGHLEVEL_WEBHOOK_URL_HERE';
+
+function hhnReady(fn) {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+  else fn();
+}
+
+/* Drop-in replacement for the old fetch('/api/...') calls. Returns a
+   Response-like object so the existing form code works unchanged. */
+function hhnSend(kind, opts) {
+  var data = {};
+  try { data = JSON.parse(opts.body || '{}'); } catch (e) {}
+  if (!data.source) data.source = kind;
+  data.page = location.pathname;
+  var ok = { ok: true, status: 200, json: function () { return Promise.resolve({}); } };
+  if (!/^https?:/.test(HHN_WEBHOOK_URL)) {
+    return Promise.resolve({ ok: false, status: 404, json: function () { return Promise.resolve({}); } });
+  }
+  return fetch(HHN_WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(function () { return ok; }).catch(function () {
+    // Browser blocked the JSON request (CORS) — resend as a simple form post.
+    var form = new URLSearchParams();
+    Object.keys(data).forEach(function (k) { form.append(k, data[k] == null ? '' : data[k]); });
+    return fetch(HHN_WEBHOOK_URL, { method: 'POST', mode: 'no-cors', body: form }).then(function () { return ok; });
+  });
+}
+
+/* Pages that used <body class="..."> carry a marker div instead. */
+hhnReady(function () {
+  document.querySelectorAll('[data-hhn-body-class]').forEach(function (el) {
+    el.getAttribute('data-hhn-body-class').split(/\s+/).forEach(function (c) {
+      if (c) document.body.classList.add(c);
+    });
+  });
+});
+
+/* ---- main.js ---- */
+// Heroes Home Network — shared interactions
+(function () {
+  'use strict';
+
+  hhnReady(function () {
+    // Mobile nav
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('nav.main');
+    if (toggle && nav) {
+      toggle.addEventListener('click', function () {
+        nav.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', nav.classList.contains('open'));
+      });
+    }
+
+    // Header shadow on scroll
+    var header = document.querySelector('header.site');
+    if (header) {
+      var onScroll = function () {
+        header.classList.toggle('scrolled', window.scrollY > 8);
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
+
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Scenic art headers on state cards (decorative, injected so markup stays clean)
+    document.querySelectorAll('.grid .card').forEach(function (card, i) {
+      var link = card.querySelector('a.card-link[data-state-link]');
+      if (!link || card.classList.contains('state-card')) return;
+      card.classList.add('state-card');
+      var body = document.createElement('div');
+      body.className = 'card-body';
+      while (card.firstChild) body.appendChild(card.firstChild);
+      var art = document.createElement('div');
+      art.className = 'card-art g' + ((i % 6) + 1);
+      art.setAttribute('aria-hidden', 'true');
+      var label = document.createElement('span');
+      label.textContent = (body.querySelector('h3') || {}).textContent || '';
+      art.appendChild(label);
+      card.appendChild(art);
+      card.appendChild(body);
+    });
+
+    // Arrow affordance on card links
+    document.querySelectorAll('a.card-link').forEach(function (a) {
+      if (a.querySelector('.arr')) return;
+      a.innerHTML = a.innerHTML.replace(/\s*(→|&rarr;)\s*$/, '');
+      var arr = document.createElement('span');
+      arr.className = 'arr';
+      arr.textContent = '→';
+      a.appendChild(arr);
+    });
+
+    // Wrap FAQ answers for padding (summary + body layout)
+    document.querySelectorAll('details.faq').forEach(function (d) {
+      if (d.querySelector('.faq-body')) return;
+      var body = document.createElement('div');
+      body.className = 'faq-body';
+      Array.prototype.slice.call(d.children).forEach(function (child) {
+        if (child.tagName !== 'SUMMARY') body.appendChild(child);
+      });
+      d.appendChild(body);
+    });
+
+    // State guide topic explorer (tab list -> detail panel)
+    var topicNav = document.querySelector('.topic-nav');
+    if (topicNav) {
+      var selectTopic = function (key, focus) {
+        topicNav.querySelectorAll('.topic-btn').forEach(function (b) {
+          var on = b.getAttribute('data-topic') === key;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        document.querySelectorAll('.topic-panel').forEach(function (panel) {
+          var on = panel.id === 'panel-' + key;
+          panel.hidden = !on;
+          panel.classList.remove('switching');
+          if (on) {
+            void panel.offsetWidth; // restart the entrance animation
+            panel.classList.add('switching');
+            if (focus) panel.focus({ preventScroll: true });
+          }
+        });
+      };
+      topicNav.addEventListener('click', function (e) {
+        var btn = e.target.closest('.topic-btn');
+        if (!btn) return;
+        selectTopic(btn.getAttribute('data-topic'), false);
+        if (history.replaceState) history.replaceState(null, '', '#' + btn.getAttribute('data-topic'));
+      });
+      // deep link: /states/texas.html#schools opens that topic
+      var applyHash = function () {
+        var hash = location.hash.replace('#', '');
+        if (hash && topicNav.querySelector('[data-topic="' + hash + '"]')) selectTopic(hash, false);
+      };
+      applyHash();
+      window.addEventListener('hashchange', applyHash);
+    }
+
+    // US map tooltip (states index)
+    var usMap = document.querySelector('.us-map');
+    if (usMap) {
+      var tip = document.createElement('div');
+      tip.className = 'map-tip';
+      document.body.appendChild(tip);
+      usMap.addEventListener('mousemove', function (e) {
+        var st = e.target.closest('.st');
+        if (!st) { tip.classList.remove('show'); return; }
+        tip.innerHTML = st.getAttribute('data-name') +
+          (st.classList.contains('on') ? '<small>Click to open the PCS guide</small>' : '<small>Call (719) 259-2246</small>');
+        tip.style.left = e.clientX + 'px';
+        tip.style.top = e.clientY + 'px';
+        tip.classList.add('show');
+      });
+      usMap.addEventListener('mouseleave', function () { tip.classList.remove('show'); });
+    }
+
+    // Reveal-on-scroll: tag common blocks, then observe
+    if (!reduceMotion && 'IntersectionObserver' in window) {
+      var targets = document.querySelectorAll(
+        '.section-head, .card, .step, .prose > h2, .prose > p, .prose > ul, ' +
+        '.prose > ol, .prose > details, .prose > .note, .prose > .table-wrap, ' +
+        '.calc, .stats .grid > div, .cta-band h2, .cta-band p, .cta-band .btn, ' +
+        '.lead-capture:not(.inline), .diff-statement, .diff-sub, .check-list > li'
+      );
+      targets.forEach(function (el) { el.classList.add('reveal'); });
+
+      // Stagger siblings inside grids
+      document.querySelectorAll('.grid').forEach(function (grid) {
+        Array.prototype.slice.call(grid.children).forEach(function (el, i) {
+          el.style.setProperty('--reveal-delay', (i % 4) * 0.09 + 's');
+        });
+      });
+
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+      document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+    }
+
+    // Animated stat counters
+    var counters = document.querySelectorAll('.stats .num');
+    if (counters.length && !reduceMotion && 'IntersectionObserver' in window) {
+      var animate = function (el) {
+        var text = el.textContent.trim();
+        var m = text.match(/^([^0-9]*)([0-9][0-9,.]*)(.*)$/);
+        if (!m) return;
+        var prefix = m[1], target = parseFloat(m[2].replace(/,/g, '')), suffix = m[3];
+        var start = null, dur = 1600;
+        var step = function (ts) {
+          if (!start) start = ts;
+          var p = Math.min((ts - start) / dur, 1);
+          var eased = 1 - Math.pow(1 - p, 4);
+          el.textContent = prefix + Math.round(target * eased).toLocaleString('en-US') + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      };
+      var cio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            animate(entry.target);
+            cio.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.4 });
+      counters.forEach(function (el) { cio.observe(el); });
+    }
+  });
+})();
+
+
+/* ---- join-network.js ---- */
+// "Join the Network" — header button that opens a modal application form for
+// real estate agents (veterans, service members, military spouses) who want a
+// seat in the network. Posts to /api/lead with source "agent-join".
+//
+// Markup contract: any element with [data-join-open] opens the modal. The
+// modal itself and the mobile nav link are injected here so every page only
+// needs the header button plus this script.
+(function () {
+  'use strict';
+
+  var MODAL_HTML =
+    '<div class="join-modal" id="join-modal" hidden>' +
+      '<div class="join-backdrop" data-join-close></div>' +
+      '<div class="join-dialog" role="dialog" aria-modal="true" aria-labelledby="join-title">' +
+        '<button type="button" class="join-close" aria-label="Close" data-join-close>&times;</button>' +
+        '<div class="lead-block">' +
+          '<div class="eyebrow">Agents &amp; Brokers</div>' +
+          '<h2 id="join-title">Join the Network</h2>' +
+          '<p class="join-intro">Seats are limited per installation and every agent clears our vetting standard first. Tell us about yourself and we’ll reach out to start the conversation.</p>' +
+          '<form class="join-form lead-form" data-source="agent-join" novalidate>' +
+            '<div class="lead-fields">' +
+              '<div><label for="jn-name">Full Name</label><input id="jn-name" data-field="name" type="text" autocomplete="name" placeholder="Jane Doe" required></div>' +
+              '<div><label for="jn-email">Email</label><input id="jn-email" data-field="email" type="email" autocomplete="email" placeholder="jane@brokerage.com" required></div>' +
+              '<div><label for="jn-phone">Phone</label><input id="jn-phone" data-field="phone" type="tel" autocomplete="tel" placeholder="(555) 123-4567" required></div>' +
+              '<div><label for="jn-brokerage">Brokerage</label><input id="jn-brokerage" data-field="brokerage" type="text" autocomplete="organization" placeholder="Keller Williams" required></div>' +
+              '<div><label for="jn-location">Market / Nearest Installation</label><input id="jn-location" data-field="location" type="text" autocomplete="off" placeholder="Fort Carson, CO" required></div>' +
+              '<div><label for="jn-connection">Military Connection</label>' +
+                '<select id="jn-connection" data-field="connection" required>' +
+                  '<option value="">Select one</option>' +
+                  '<option>Veteran</option>' +
+                  '<option>Active Duty</option>' +
+                  '<option>Guard / Reserve</option>' +
+                  '<option>Military Spouse</option>' +
+                  '<option>Other / None yet</option>' +
+                '</select></div>' +
+              '<div><label for="jn-closings">Closings, Last 24 Months</label><input id="jn-closings" data-field="closings" type="number" min="0" inputmode="numeric" placeholder="12"></div>' +
+              '<div><label for="jn-va">Of Those, VA-Financed</label><input id="jn-va" data-field="va" type="number" min="0" inputmode="numeric" placeholder="4"></div>' +
+              '<div class="full"><label for="jn-notes">Anything else? <span class="opt">(optional)</span></label><textarea id="jn-notes" data-field="notes" rows="3" placeholder="Years licensed, teams, why you want in…"></textarea></div>' +
+            '</div>' +
+            '<button class="btn btn-red" type="submit" data-sending="Sending…">Submit My Application</button>' +
+            '<p class="lead-note">We review every application by hand. Expect a call or email within a few business days. Questions? Call <a href="tel:+17192592246">(719) 259-2246</a>.</p>' +
+          '</form>' +
+          '<div class="form-done" hidden>' +
+            '<div class="done-mark">✓</div>' +
+            '<h3>Application received.</h3>' +
+            '<p>Thanks for raising your hand. We’ll review your market, closings, and military connection and reach out within a few business days.</p>' +
+          '</div>' +
+          '<p class="form-error" hidden></p>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  var modal, lastFocus;
+
+  function val(form, name) {
+    var el = form.querySelector('[data-field="' + name + '"]');
+    return el ? String(el.value).trim() : '';
+  }
+
+  function open() {
+    if (!modal) {
+      document.body.insertAdjacentHTML('beforeend', MODAL_HTML);
+      modal = document.getElementById('join-modal');
+      modal.addEventListener('click', function (e) {
+        if (e.target.closest('[data-join-close]')) close();
+      });
+      modal.querySelector('form.join-form').addEventListener('submit', submit);
+    }
+    lastFocus = document.activeElement;
+    modal.hidden = false;
+    document.body.classList.add('join-open');
+    var nav = document.querySelector('nav.main.open');
+    if (nav) nav.classList.remove('open');
+    requestAnimationFrame(function () {
+      modal.classList.add('show');
+      var first = modal.querySelector('input');
+      if (first) first.focus();
+    });
+  }
+
+  function close() {
+    if (!modal || modal.hidden) return;
+    modal.classList.remove('show');
+    document.body.classList.remove('join-open');
+    setTimeout(function () { modal.hidden = true; }, 220);
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  function submit(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var form = e.currentTarget;
+    var block = form.closest('.lead-block');
+    var errEl = block.querySelector('.form-error');
+    var doneEl = block.querySelector('.form-done');
+    var btn = form.querySelector('button[type="submit"]');
+
+    function fail(msg) { errEl.textContent = msg; errEl.hidden = false; }
+    errEl.hidden = true;
+
+    var name = val(form, 'name'), email = val(form, 'email'), phone = val(form, 'phone');
+    var brokerage = val(form, 'brokerage'), location = val(form, 'location');
+    var connection = val(form, 'connection'), closings = val(form, 'closings');
+    var va = val(form, 'va'), notes = val(form, 'notes');
+
+    if (!name || !/.+@.+\..+/.test(email)) return fail('Please fill in your name and a valid email address.');
+    if (phone.replace(/\D/g, '').length < 10) return fail('Please add a phone number we can reach you at.');
+    if (!brokerage || !location || !connection) return fail('Please add your brokerage, market, and military connection.');
+
+    var context = [
+      'Brokerage: ' + brokerage,
+      'Connection: ' + connection,
+      closings ? 'Closings/24mo: ' + closings + (va ? ' (VA: ' + va + ')' : '') : '',
+      notes ? 'Notes: ' + notes : ''
+    ].filter(Boolean).join(' | ');
+
+    var label = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = btn.getAttribute('data-sending') || 'Sending…';
+
+    hhnSend('lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name, email: email, phone: phone, location: location,
+        source: 'agent-join', offer: 'Network agent application', context: context
+      })
+    }).then(function (r) {
+      if (r.ok) return null;
+      return r.json().catch(function () { return {}; }).then(function (data) {
+        var err = new Error('bad status ' + r.status);
+        err.status = r.status; err.code = data && data.error;
+        throw err;
+      });
+    }).then(function () {
+      form.hidden = true;
+      doneEl.hidden = false;
+    }).catch(function (err) {
+      btn.disabled = false;
+      btn.textContent = label;
+      var msg = 'Something went wrong sending that. Please try again, or call (719) 259-2246.';
+      if (err && err.code === 'twilio_not_configured') {
+        msg = 'This form isn’t configured yet (Twilio credentials missing on the server). Site admin: set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and TWILIO_FROM_NUMBER, then redeploy.';
+      } else if (err && err.status === 404) {
+        msg = 'Form endpoint not found on this deployment (/api/lead returned 404). Site admin: confirm the api/ folder is deployed. Meanwhile, call (719) 259-2246.';
+      }
+      fail(msg);
+    });
+  }
+
+  document.addEventListener('click', function (e) {
+    var trigger = e.target.closest('[data-join-open]');
+    if (!trigger) return;
+    e.preventDefault();
+    open();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') close();
+  });
+
+  // Mirror the header button inside the mobile nav, where header CTAs are hidden.
+  hhnReady(function () {
+    var list = document.querySelector('nav.main ul');
+    if (list && !list.querySelector('[data-join-open]')) {
+      var li = document.createElement('li');
+      li.className = 'nav-join-mobile';
+      li.innerHTML = '<a href="#join" data-join-open>Join the Network</a>';
+      list.appendChild(li);
+    }
+    if (location.hash === '#join') open();
+  });
+})();
+
+
+/* ---- lead-capture.js ---- */
+// Shared lead capture — powers every form on the site that posts to /api/lead
+// (pre-approval, BAH calculator breakdown, state guides, PCS checklist).
+//
+// Markup contract:
+//   <div class="lead-block">
+//     <form class="lead-form" data-source="state-guide"
+//           data-offer="Texas PCS packet" data-location="Texas" novalidate>
+//       <input data-field="name"> <input data-field="email">
+//       <input data-field="phone"> <input data-field="location">
+//       <button type="submit">Send It</button>
+//       <p class="form-error" hidden></p>
+//     </form>
+//     <div class="form-done" hidden>…</div>
+//   </div>
+//
+// data-source        which form this is (matches SOURCE_LABELS in api/lead.js)
+// data-offer         what the person is being sent
+// data-location      fallback target base/state when there is no location input
+// data-require-phone "true" to make the phone field mandatory
+// data-context       extra detail (the BAH calculator sets this at runtime)
+(function () {
+  'use strict';
+
+  var PHONE_MSG = 'Please add a phone number we can reach you at.';
+
+  function field(form, name) {
+    return form.querySelector('[data-field="' + name + '"]');
+  }
+  function value(form, name) {
+    var el = field(form, name);
+    return el ? el.value.trim() : '';
+  }
+
+  function submit(form) {
+    var block = form.closest('.lead-block') || form.parentNode;
+    var errEl = block.querySelector('.form-error');
+    var doneEl = block.querySelector('.form-done');
+    var btn = form.querySelector('button[type="submit"]');
+    var name = value(form, 'name');
+    var email = value(form, 'email');
+    var phone = value(form, 'phone');
+    var location = value(form, 'location') || form.getAttribute('data-location') || '';
+    var requirePhone = form.getAttribute('data-require-phone') === 'true';
+    var digits = phone.replace(/\D/g, '').length;
+
+    function fail(msg) {
+      if (!errEl) return;
+      errEl.textContent = msg;
+      errEl.hidden = false;
+    }
+    if (errEl) errEl.hidden = true;
+
+    if (!name || !/.+@.+\..+/.test(email)) {
+      fail('Please fill in your name and a valid email address.');
+      return;
+    }
+    if (requirePhone && digits < 10) {
+      fail(PHONE_MSG);
+      return;
+    }
+    if (phone && digits < 10) {
+      fail('That phone number looks incomplete — leave it blank or enter 10 digits.');
+      return;
+    }
+
+    var label = btn ? btn.textContent : '';
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = btn.getAttribute('data-sending') || 'Sending…';
+    }
+
+    hhnSend('lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        phone: phone,
+        location: location,
+        source: form.getAttribute('data-source') || 'website',
+        offer: form.getAttribute('data-offer') || '',
+        context: form.getAttribute('data-context') || ''
+      })
+    }).then(function (r) {
+      if (r.ok) return null;
+      return r.json().catch(function () { return {}; }).then(function (data) {
+        var err = new Error('bad status ' + r.status);
+        err.status = r.status;
+        err.code = data && data.error;
+        throw err;
+      });
+    }).then(function () {
+      form.hidden = true;
+      if (doneEl) doneEl.hidden = false;
+    }).catch(function (err) {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = label;
+      }
+      var msg = 'Something went wrong sending that. Please try again, or call (719) 259-2246 and we’ll take care of it by phone.';
+      if (err && err.code === 'twilio_not_configured') {
+        msg = 'This form isn’t configured yet (Twilio credentials missing on the server). Site admin: set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and TWILIO_FROM_NUMBER, then redeploy.';
+      } else if (err && err.status === 404) {
+        msg = 'Form endpoint not found on this deployment (/api/lead returned 404). Site admin: confirm the api/ folder is deployed. Meanwhile, call (719) 259-2246.';
+      }
+      fail(msg);
+    });
+  }
+
+  document.addEventListener('submit', function (e) {
+    var form = e.target.closest('form.lead-form');
+    if (!form) return;
+    e.preventDefault();
+    submit(form);
+  });
+})();
+
+
+/* ---- bah-calculator.js ---- */
+if (document.getElementById('station-input')) {
+// BAH estimator — representative rates for planning purposes only.
+// Anchor values approximate published E-5 "with dependents" rates for each
+// military housing area; other grades are derived with typical grade spreads.
+// Always verify exact rates at the official DoD BAH lookup.
+(function () {
+  'use strict';
+
+  var STATIONS = [
+    { name: 'Colorado Springs, CO', bases: 'Fort Carson, Peterson SFB, Schriever SFB, USAFA', e5: 2391 },
+    { name: 'Killeen, TX', bases: 'Fort Hood', e5: 1653 },
+    { name: 'El Paso, TX', bases: 'Fort Bliss', e5: 1449 },
+    { name: 'San Antonio, TX', bases: 'JBSA: Lackland, Randolph, Fort Sam Houston', e5: 2064 },
+    { name: 'Corpus Christi, TX', bases: 'NAS Corpus Christi', e5: 1743 },
+    { name: 'Norfolk / Virginia Beach, VA', bases: 'Naval Station Norfolk, JEB Little Creek', e5: 2148 },
+    { name: 'Washington, DC area', bases: 'Fort Belvoir, Pentagon, JB Andrews, Fort Meade', e5: 3111 },
+    { name: 'Quantico, VA', bases: 'MCB Quantico', e5: 2769 },
+    { name: 'Hampton / Newport News, VA', bases: 'JB Langley-Eustis', e5: 2007 },
+    { name: 'Fayetteville, NC', bases: 'Fort Bragg', e5: 1602 },
+    { name: 'Jacksonville, NC', bases: 'Camp Lejeune, MCAS New River', e5: 1521 },
+    { name: 'Goldsboro, NC', bases: 'Seymour Johnson AFB', e5: 1389 },
+    { name: 'Havelock, NC', bases: 'MCAS Cherry Point', e5: 1359 },
+    { name: 'Tampa, FL', bases: 'MacDill AFB', e5: 2619 },
+    { name: 'Fort Walton Beach / Destin, FL', bases: 'Eglin AFB, Hurlburt Field', e5: 2337 },
+    { name: 'Pensacola, FL', bases: 'NAS Pensacola', e5: 1938 },
+    { name: 'Jacksonville, FL', bases: 'NAS Jacksonville, NS Mayport', e5: 2031 },
+    { name: 'Columbus, GA', bases: 'Fort Benning', e5: 1587 },
+    { name: 'Savannah / Hinesville, GA', bases: 'Fort Stewart, Hunter AAF', e5: 1998 },
+    { name: 'Augusta, GA', bases: 'Fort Eisenhower', e5: 1614 },
+    { name: 'Warner Robins, GA', bases: 'Robins AFB', e5: 1443 },
+    { name: 'San Diego, CA', bases: 'Naval Base San Diego, Miramar, Camp Pendleton', e5: 3813 },
+    { name: 'Fairfield, CA', bases: 'Travis AFB', e5: 2631 },
+    { name: 'Lemoore, CA', bases: 'NAS Lemoore', e5: 1836 },
+    { name: 'Twentynine Palms, CA', bases: 'MCAGCC Twentynine Palms', e5: 1809 },
+    { name: 'Tacoma, WA', bases: 'Joint Base Lewis-McChord', e5: 2712 },
+    { name: 'Bremerton / Silverdale, WA', bases: 'Naval Base Kitsap', e5: 2451 },
+    { name: 'Oak Harbor, WA', bases: 'NAS Whidbey Island', e5: 2247 },
+    { name: 'Spokane, WA', bases: 'Fairchild AFB', e5: 1662 },
+    { name: 'Honolulu, HI', bases: 'JB Pearl Harbor-Hickam, Schofield Barracks, MCBH Kaneohe', e5: 3921 },
+    { name: 'Anchorage, AK', bases: 'JB Elmendorf-Richardson', e5: 2532 },
+    { name: 'Fairbanks, AK', bases: 'Eielson AFB, Fort Wainwright', e5: 1794 },
+    { name: 'Clarksville, TN / Fort Campbell, KY', bases: 'Fort Campbell', e5: 1554 },
+    { name: 'Millington, TN', bases: 'NSA Mid-South', e5: 1671 },
+    { name: 'Louisville / Fort Knox, KY', bases: 'Fort Knox', e5: 1509 },
+    { name: 'Oklahoma City, OK', bases: 'Tinker AFB', e5: 1497 },
+    { name: 'Lawton, OK', bases: 'Fort Sill', e5: 1329 },
+    { name: 'Enid, OK', bases: 'Vance AFB', e5: 1281 },
+    { name: 'Junction City / Manhattan, KS', bases: 'Fort Riley', e5: 1416 },
+    { name: 'Leavenworth, KS', bases: 'Fort Leavenworth', e5: 1626 },
+    { name: 'Wichita, KS', bases: 'McConnell AFB', e5: 1443 },
+    { name: 'St. Robert, MO', bases: 'Fort Leonard Wood', e5: 1347 },
+    { name: 'Knob Noster, MO', bases: 'Whiteman AFB', e5: 1371 },
+    { name: 'Huntsville, AL', bases: 'Redstone Arsenal', e5: 1683 },
+    { name: 'Montgomery, AL', bases: 'Maxwell AFB', e5: 1497 },
+    { name: 'Dothan / Enterprise, AL', bases: 'Fort Novosel', e5: 1422 },
+    { name: 'Biloxi, MS', bases: 'Keesler AFB', e5: 1467 },
+    { name: 'Columbus, MS', bases: 'Columbus AFB', e5: 1311 },
+    { name: 'Little Rock / Jacksonville, AR', bases: 'Little Rock AFB', e5: 1434 },
+    { name: 'Shreveport / Bossier City, LA', bases: 'Barksdale AFB', e5: 1503 },
+    { name: 'Leesville, LA', bases: 'Fort Johnson', e5: 1338 },
+    { name: 'Phoenix / Glendale, AZ', bases: 'Luke AFB', e5: 2334 },
+    { name: 'Tucson, AZ', bases: 'Davis-Monthan AFB', e5: 1911 },
+    { name: 'Sierra Vista, AZ', bases: 'Fort Huachuca', e5: 1704 },
+    { name: 'Yuma, AZ', bases: 'MCAS Yuma, YPG', e5: 1719 },
+    { name: 'Las Vegas, NV', bases: 'Nellis AFB, Creech AFB', e5: 2148 },
+    { name: 'Fallon, NV', bases: 'NAS Fallon', e5: 1638 },
+    { name: 'Albuquerque, NM', bases: 'Kirtland AFB', e5: 1839 },
+    { name: 'Alamogordo, NM', bases: 'Holloman AFB', e5: 1308 },
+    { name: 'Clovis, NM', bases: 'Cannon AFB', e5: 1263 },
+    { name: 'Watertown, NY', bases: 'Fort Drum', e5: 1728 },
+    { name: 'West Point, NY', bases: 'USMA West Point', e5: 2634 },
+    { name: 'Trenton area, NJ', bases: 'JB McGuire-Dix-Lakehurst', e5: 2418 },
+    { name: 'Dayton, OH', bases: 'Wright-Patterson AFB', e5: 1701 },
+    { name: 'Belleville, IL', bases: 'Scott AFB', e5: 1707 },
+    { name: 'North Chicago, IL', bases: 'Naval Station Great Lakes', e5: 2214 },
+    { name: 'Ogden / Layton, UT', bases: 'Hill AFB', e5: 1902 },
+    { name: 'Mountain Home, ID', bases: 'Mountain Home AFB', e5: 1389 },
+    { name: 'Great Falls, MT', bases: 'Malmstrom AFB', e5: 1494 },
+    { name: 'Omaha / Bellevue, NE', bases: 'Offutt AFB', e5: 1713 },
+    { name: 'Minot, ND', bases: 'Minot AFB', e5: 1329 },
+    { name: 'Grand Forks, ND', bases: 'Grand Forks AFB', e5: 1302 },
+    { name: 'Rapid City, SD', bases: 'Ellsworth AFB', e5: 1521 },
+    { name: 'Cheyenne, WY', bases: 'F.E. Warren AFB', e5: 1608 },
+    { name: 'Columbia, SC', bases: 'Fort Jackson', e5: 1698 },
+    { name: 'Sumter, SC', bases: 'Shaw AFB', e5: 1503 },
+    { name: 'Charleston, SC', bases: 'JB Charleston', e5: 2124 },
+    { name: 'Beaufort, SC', bases: 'MCRD Parris Island, MCAS Beaufort', e5: 1932 },
+    { name: 'Groton / New London, CT', bases: 'Naval Submarine Base New London', e5: 2325 },
+    { name: 'Dover, DE', bases: 'Dover AFB', e5: 1812 },
+    { name: 'Aberdeen, MD', bases: 'Aberdeen Proving Ground', e5: 2043 },
+    { name: 'Lexington Park, MD', bases: 'NAS Patuxent River', e5: 2334 }
+  ];
+
+  var GRADES = {
+    E: [['E-1', 0.90], ['E-2', 0.90], ['E-3', 0.90], ['E-4', 0.90], ['E-5', 1.00],
+        ['E-6', 1.07], ['E-7', 1.12], ['E-8', 1.17], ['E-9', 1.22]],
+    W: [['W-1', 1.10], ['W-2', 1.15], ['W-3', 1.21], ['W-4', 1.27], ['W-5', 1.32]],
+    O: [['O-1', 1.05], ['O-2', 1.12], ['O-3', 1.22], ['O-4', 1.32], ['O-5', 1.38], ['O-6', 1.40]]
+  };
+  var WITHOUT_DEP_FACTOR = 0.82;
+
+  var comboInput = document.getElementById('station-input');
+  if (!comboInput) return;
+  var comboList = document.getElementById('station-list');
+  var gradeCats = document.getElementById('grade-cats');
+  var gradePills = document.getElementById('grade-pills');
+  var depPills = document.getElementById('dep-pills');
+  var resultEl = document.getElementById('result');
+
+  var state = { station: null, cat: 'E', grade: 'E-5', mult: 1.0, withDeps: true, activeIdx: -1, matches: [] };
+
+  /* ---------- station type-ahead ---------- */
+  function norm(s) { return s.toLowerCase().replace(/[^a-z0-9 ]/g, ''); }
+  function filterStations(q) {
+    q = norm(q);
+    if (!q) return STATIONS.slice(0, 8);
+    var terms = q.split(/\s+/).filter(Boolean);
+    return STATIONS.filter(function (s) {
+      var hay = norm(s.name + ' ' + s.bases);
+      return terms.every(function (t) { return hay.indexOf(t) !== -1; });
+    }).slice(0, 8);
+  }
+  function renderList() {
+    if (!state.matches.length) {
+      comboList.innerHTML = '<li class="combo-empty">No match — try a base name, city, or state abbreviation. Or call (719) 259-2246 for any ZIP code.</li>';
+      comboList.hidden = false;
+      return;
+    }
+    comboList.innerHTML = state.matches.map(function (s, i) {
+      return '<li role="option" data-i="' + i + '" class="' + (i === state.activeIdx ? 'active' : '') + '" aria-selected="' + (i === state.activeIdx) + '">' +
+        '<strong>' + s.name + '</strong><small>' + s.bases + '</small></li>';
+    }).join('');
+    comboList.hidden = false;
+  }
+  function closeList() { comboList.hidden = true; state.activeIdx = -1; }
+  function selectStation(s) {
+    state.station = s;
+    comboInput.value = s.name + ' — ' + s.bases;
+    closeList();
+    calc();
+  }
+  comboInput.addEventListener('input', function () {
+    state.station = null;
+    state.matches = filterStations(comboInput.value);
+    state.activeIdx = state.matches.length ? 0 : -1;
+    renderList();
+    calc();
+  });
+  comboInput.addEventListener('focus', function () {
+    if (state.station) { comboInput.select(); }
+    state.matches = filterStations(state.station ? '' : comboInput.value);
+    state.activeIdx = -1;
+    renderList();
+  });
+  comboInput.addEventListener('keydown', function (e) {
+    if (comboList.hidden) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); state.activeIdx = Math.min(state.activeIdx + 1, state.matches.length - 1); renderList(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); state.activeIdx = Math.max(state.activeIdx - 1, 0); renderList(); }
+    else if (e.key === 'Enter') { e.preventDefault(); if (state.matches[state.activeIdx]) selectStation(state.matches[state.activeIdx]); }
+    else if (e.key === 'Escape') { closeList(); }
+  });
+  comboList.addEventListener('mousedown', function (e) {
+    var li = e.target.closest('li[data-i]');
+    if (li) { e.preventDefault(); selectStation(state.matches[Number(li.getAttribute('data-i'))]); }
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.combo')) closeList();
+  });
+
+  /* ---------- grade + dependents pickers ---------- */
+  function renderGradePills() {
+    gradePills.innerHTML = GRADES[state.cat].map(function (g) {
+      return '<button type="button" class="pill' + (g[0] === state.grade ? ' active' : '') + '" data-grade="' + g[0] + '" data-mult="' + g[1] + '">' + g[0] + '</button>';
+    }).join('');
+  }
+  gradeCats.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-cat]');
+    if (!btn) return;
+    state.cat = btn.getAttribute('data-cat');
+    var first = GRADES[state.cat][state.cat === 'E' ? 4 : 0];
+    state.grade = first[0]; state.mult = first[1];
+    gradeCats.querySelectorAll('button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    renderGradePills();
+    calc();
+  });
+  gradePills.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-grade]');
+    if (!btn) return;
+    state.grade = btn.getAttribute('data-grade');
+    state.mult = Number(btn.getAttribute('data-mult'));
+    gradePills.querySelectorAll('button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    calc();
+  });
+  depPills.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-dep]');
+    if (!btn) return;
+    state.withDeps = btn.getAttribute('data-dep') === 'with';
+    depPills.querySelectorAll('button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    calc();
+  });
+
+  /* ---------- email capture on the results screen ---------- */
+  var captureEl = document.getElementById('bah-capture');
+  var captureStationEl = document.getElementById('bah-capture-station');
+  var captureForm = captureEl ? captureEl.querySelector('.lead-form') : null;
+
+  // Reveal the capture alongside the result and keep the lead payload in sync
+  // with whatever estimate the visitor is currently looking at.
+  function syncCapture(rate) {
+    if (!captureEl) return;
+    if (!state.station) { captureEl.hidden = true; return; }
+    captureEl.hidden = false;
+    if (captureStationEl) captureStationEl.textContent = state.station.name;
+    if (captureForm) {
+      captureForm.setAttribute('data-location', state.station.name);
+      captureForm.setAttribute('data-context',
+        'Estimate: $' + rate.toLocaleString('en-US') + '/mo — ' + state.grade + ' ' +
+        (state.withDeps ? 'with' : 'without') + ' dependents at ' + state.station.name);
+    }
+  }
+
+  /* ---------- live result ---------- */
+  function calc() {
+    if (!state.station) { resultEl.classList.remove('show'); syncCapture(0); return; }
+    var rate = Math.round(state.station.e5 * state.mult * (state.withDeps ? 1 : WITHOUT_DEP_FACTOR));
+    document.getElementById('amount').textContent = '$' + rate.toLocaleString('en-US') + '/mo';
+    document.getElementById('detail').textContent =
+      state.grade + ' ' + (state.withDeps ? 'with' : 'without') + ' dependents — ' + state.station.name +
+      '. Estimate only; verify your exact rate at the official DoD BAH lookup.';
+    resultEl.classList.add('show');
+    syncCapture(rate);
+  }
+
+  renderGradePills();
+})();
+
+}
+
+/* ---- class-signup.js ---- */
+if (document.getElementById('class-dates') || document.getElementById('next-class-date')) {
+// VA loan class — schedule dates + signup form
+(function () {
+  'use strict';
+
+  // Class runs the 4th Tuesday of every month, 12:00 PM ET.
+  function fourthTuesday(year, month) {
+    var d = new Date(year, month, 1);
+    var offset = (2 - d.getDay() + 7) % 7; // 2 = Tuesday
+    return new Date(year, month, 1 + offset + 21);
+  }
+  function nextClasses(count) {
+    var out = [];
+    var now = new Date();
+    var y = now.getFullYear(), m = now.getMonth();
+    while (out.length < count) {
+      var t = fourthTuesday(y, m);
+      // class considered past after 1pm ET on the day; simple local-date compare
+      if (t >= new Date(now.getFullYear(), now.getMonth(), now.getDate())) out.push(t);
+      m++; if (m > 11) { m = 0; y++; }
+    }
+    return out;
+  }
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var LONG_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  var dates = nextClasses(3);
+
+  var dateStrip = document.getElementById('class-dates');
+  if (dateStrip) {
+    dateStrip.innerHTML = dates.map(function (d, i) {
+      return '<div class="class-date' + (i === 0 ? ' next' : '') + '">' +
+        '<strong>' + MONTHS[d.getMonth()] + ' ' + d.getDate() + '</strong>' +
+        '<span>' + d.getFullYear() + '</span>' +
+        '<small>' + (i === 0 ? 'Next up' : 'Tuesday') + '</small></div>';
+    }).join('');
+  }
+  var hero = document.getElementById('next-class-date');
+  if (hero) {
+    hero.innerHTML = '&#128197; Next class: Tuesday, ' + LONG_MONTHS[dates[0].getMonth()] + ' ' +
+      dates[0].getDate() + ', ' + dates[0].getFullYear();
+  }
+  var blurb = document.getElementById('signup-blurb');
+  if (blurb) {
+    blurb.textContent = 'Free class on Tuesday, ' + LONG_MONTHS[dates[0].getMonth()] + ' ' +
+      dates[0].getDate() + ', ' + dates[0].getFullYear() + ' at 12:00 PM ET. Sign up and we’ll send the Zoom link.';
+  }
+
+  // Signup form -> serverless endpoint -> Twilio SMS notification
+  var form = document.getElementById('class-form');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = document.getElementById('f-name').value.trim();
+    var email = document.getElementById('f-email').value.trim();
+    var phone = document.getElementById('f-phone').value.trim();
+    var errEl = document.getElementById('form-error');
+    errEl.hidden = true;
+    if (!name || !/.+@.+\..+/.test(email) || phone.replace(/\D/g, '').length < 10) {
+      errEl.textContent = 'Please fill in your name, a valid email, and a valid phone number.';
+      errEl.hidden = false;
+      return;
+    }
+    var btn = document.getElementById('f-submit');
+    btn.disabled = true;
+    btn.textContent = 'Saving your spot…';
+    hhnSend('class-signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        phone: phone,
+        classDate: LONG_MONTHS[dates[0].getMonth()] + ' ' + dates[0].getDate() + ', ' + dates[0].getFullYear()
+      })
+    }).then(function (r) {
+      if (r.ok) return null;
+      return r.json().catch(function () { return {}; }).then(function (data) {
+        var err = new Error('bad status ' + r.status);
+        err.status = r.status;
+        err.code = data && data.error;
+        throw err;
+      });
+    }).then(function () {
+      form.hidden = true;
+      document.getElementById('form-done').hidden = false;
+    }).catch(function (err) {
+      btn.disabled = false;
+      btn.textContent = 'Save My Spot';
+      var msg = 'Something went wrong sending your signup. Please try again, or call (719) 259-2246 and we’ll add you manually.';
+      if (err && err.code === 'twilio_not_configured') {
+        msg = 'Signup service isn’t configured yet (Twilio credentials missing on the server). Site admin: set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and TWILIO_FROM_NUMBER, then redeploy.';
+      } else if (err && err.status === 404) {
+        msg = 'Signup endpoint not found on this deployment (/api/class-signup returned 404). Site admin: confirm the api/ folder is deployed. Meanwhile, call (719) 259-2246 to sign up.';
+      }
+      errEl.textContent = msg;
+      errEl.hidden = false;
+    });
+  });
+})();
+
+}
+
+/* ---- compass-class-signup.js ---- */
+if (document.getElementById('f-office')) {
+// Compass VA loan class — signup form (single scheduled session)
+(function () {
+  'use strict';
+
+  var CLASS_DATE = 'August 18, 2026 at 10:00 AM ET';
+  var SOURCE = 'Compass Real Estate';
+
+  var form = document.getElementById('class-form');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = document.getElementById('f-name').value.trim();
+    var email = document.getElementById('f-email').value.trim();
+    var phone = document.getElementById('f-phone').value.trim();
+    var officeEl = document.getElementById('f-office');
+    var office = officeEl ? officeEl.value.trim() : '';
+    var errEl = document.getElementById('form-error');
+    errEl.hidden = true;
+    if (!name || !/.+@.+\..+/.test(email) || phone.replace(/\D/g, '').length < 10) {
+      errEl.textContent = 'Please fill in your name, a valid email, and a valid phone number.';
+      errEl.hidden = false;
+      return;
+    }
+    var btn = document.getElementById('f-submit');
+    btn.disabled = true;
+    btn.textContent = 'Saving your spot…';
+    hhnSend('class-signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        phone: phone,
+        classDate: CLASS_DATE,
+        source: SOURCE,
+        office: office
+      })
+    }).then(function (r) {
+      if (r.ok) return null;
+      return r.json().catch(function () { return {}; }).then(function (data) {
+        var err = new Error('bad status ' + r.status);
+        err.status = r.status;
+        err.code = data && data.error;
+        throw err;
+      });
+    }).then(function () {
+      form.hidden = true;
+      document.getElementById('form-done').hidden = false;
+    }).catch(function (err) {
+      btn.disabled = false;
+      btn.textContent = 'Save My Spot';
+      var msg = 'Something went wrong sending your signup. Please try again, or call (719) 259-2246 and we’ll add you manually.';
+      if (err && err.code === 'twilio_not_configured') {
+        msg = 'Signup service isn’t configured yet (Twilio credentials missing on the server). Site admin: set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and TWILIO_FROM_NUMBER, then redeploy.';
+      } else if (err && err.status === 404) {
+        msg = 'Signup endpoint not found on this deployment (/api/class-signup returned 404). Site admin: confirm the api/ folder is deployed. Meanwhile, call (719) 259-2246 to sign up.';
+      }
+      errEl.textContent = msg;
+      errEl.hidden = false;
+    });
+  });
+})();
+
+}
+</script>

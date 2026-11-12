@@ -1,0 +1,28 @@
+PAGE PATH:   /nsa-annapolis
+OLD URL:     https://heroeshomenetwork.com/bases/nsa-annapolis.html
+PAGE TITLE:  NSA Annapolis | Military Installation Guide | Heroes Home Network
+DESCRIPTION: PCSing to NSA Annapolis? Neighborhoods, schools, things to do, and housing near NSA Annapolis in Annapolis, Maryland. Your military relocation guide.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "NSA Annapolis: Military Installation Guide",
+  "description": "PCSing to NSA Annapolis? Neighborhoods, schools, things to do, and housing near NSA Annapolis in Annapolis, Maryland. Your military relocation guide.",
+  "author": {"@type": "Organization", "name": "Heroes Home Network"},
+  "publisher": {"@type": "Organization", "name": "Heroes Home Network", "url": "https://heroeshomenetwork.com/"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://heroeshomenetwork.com/"},
+    {"@type": "ListItem", "position": 2, "name": "Base Guides", "item": "https://heroeshomenetwork.com/bases"},
+    {"@type": "ListItem", "position": 3, "name": "NSA Annapolis", "item": "https://heroeshomenetwork.com/nsa-annapolis"}
+  ]
+}
+</script>

@@ -1,0 +1,28 @@
+PAGE PATH:   /north-carolina
+OLD URL:     https://heroeshomenetwork.com/states/north-carolina.html
+PAGE TITLE:  PCSing to North Carolina? Military Relocation & VA Loan Guide | Heroes Home Network
+DESCRIPTION: PCSing to North Carolina? Your military relocation guide: major bases, veteran tax benefits, top school districts, weather, traffic, and how to buy a home in North Carolina with a VA loan. Call (719) 259-2246.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "PCSing to North Carolina: Military Relocation & VA Loan Guide",
+  "description": "Affordable housing, veteran-friendly taxes, and two of the largest bases in the world.",
+  "author": {"@type": "Organization", "name": "Heroes Home Network"},
+  "publisher": {"@type": "Organization", "name": "Heroes Home Network", "url": "https://heroeshomenetwork.com/"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://heroeshomenetwork.com/"},
+    {"@type": "ListItem", "position": 2, "name": "PCS State Guides", "item": "https://heroeshomenetwork.com/states"},
+    {"@type": "ListItem", "position": 3, "name": "North Carolina", "item": "https://heroeshomenetwork.com/north-carolina"}
+  ]
+}
+</script>

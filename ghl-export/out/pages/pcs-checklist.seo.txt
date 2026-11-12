@@ -1,0 +1,22 @@
+PAGE PATH:   /pcs-checklist
+OLD URL:     https://heroeshomenetwork.com/pcs-checklist.html
+PAGE TITLE:  Military PCS Checklist: Home Buying Timeline for Your Next Move | Heroes Home Network
+DESCRIPTION: A step-by-step PCS checklist for military families planning to buy a home at their next duty station — what to do at orders, 90 days out, 60 days out, 30 days out, and on arrival.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "PCS Home Buying Checklist",
+  "description": "Step-by-step timeline for buying a home during a military PCS move.",
+  "step": [
+    {"@type": "HowToStep", "name": "Orders in hand", "text": "Research your new state, estimate BAH, and get pre-approved for a VA loan."},
+    {"@type": "HowToStep", "name": "90 days out", "text": "Choose neighborhoods, connect with a military-friendly agent, and schedule a house-hunting trip."},
+    {"@type": "HowToStep", "name": "60 days out", "text": "Go under contract and complete the VA appraisal and inspections."},
+    {"@type": "HowToStep", "name": "30 days out", "text": "Finalize underwriting, schedule closing around your report date, and coordinate the move."},
+    {"@type": "HowToStep", "name": "Arrival", "text": "Close on your home, update DEERS and finance, and settle in."}
+  ]
+}
+</script>

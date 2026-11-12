@@ -1,0 +1,8 @@
+PAGE PATH:   /states
+OLD URL:     https://heroeshomenetwork.com/states/index.html
+PAGE TITLE:  PCS State Guides: Military Relocation Info for Every Base State | Heroes Home Network
+DESCRIPTION: Military PCS relocation guides for every state with a major installation — bases, veteran tax benefits, school districts, weather, traffic, and VA loan help for your next duty station.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+(none)

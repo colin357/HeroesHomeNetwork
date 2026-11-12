@@ -1,0 +1,30 @@
+PAGE PATH:   /bah-calculator
+OLD URL:     https://heroeshomenetwork.com/bah-calculator.html
+PAGE TITLE:  BAH Calculator 2026 — Estimate Your Military Housing Allowance | Heroes Home Network
+DESCRIPTION: Free 2026 BAH calculator for military members. Estimate your Basic Allowance for Housing by duty station and pay grade, and see how BAH translates into a mortgage budget with a VA loan.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "BAH Calculator",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "url": "https://heroeshomenetwork.com/bah-calculator",
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "description": "Free calculator that estimates Basic Allowance for Housing (BAH) for U.S. military members by duty station and pay grade."
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "What is BAH?", "acceptedAnswer": {"@type": "Answer", "text": "Basic Allowance for Housing (BAH) is a monthly, non-taxable allowance paid to U.S. service members to offset housing costs when government quarters are not provided. Rates vary by duty station ZIP code, pay grade, and dependency status."}},
+    {"@type": "Question", "name": "Can BAH be used to qualify for a mortgage?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Lenders count BAH as effective income for VA loan qualification, and because it is non-taxable, many lenders gross it up when calculating your qualifying income."}},
+    {"@type": "Question", "name": "Does BAH change when I PCS?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. BAH is tied to your duty station's ZIP code, so your rate changes when you PCS. Rate protection generally prevents your BAH from decreasing while you remain at the same duty station."}}
+  ]
+}
+</script>

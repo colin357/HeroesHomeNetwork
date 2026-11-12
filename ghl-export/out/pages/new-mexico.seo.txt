@@ -1,0 +1,28 @@
+PAGE PATH:   /new-mexico
+OLD URL:     https://heroeshomenetwork.com/states/new-mexico.html
+PAGE TITLE:  PCSing to New Mexico? Military Relocation & VA Loan Guide | Heroes Home Network
+DESCRIPTION: PCSing to New Mexico? Your military relocation guide: major bases, veteran tax benefits, top school districts, weather, traffic, and how to buy a home in New Mexico with a VA loan. Call (719) 259-2246.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "PCSing to New Mexico: Military Relocation & VA Loan Guide",
+  "description": "A phased exemption on military retirement pay, low home prices, and three major Air Force installations plus White Sands.",
+  "author": {"@type": "Organization", "name": "Heroes Home Network"},
+  "publisher": {"@type": "Organization", "name": "Heroes Home Network", "url": "https://heroeshomenetwork.com/"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://heroeshomenetwork.com/"},
+    {"@type": "ListItem", "position": 2, "name": "PCS State Guides", "item": "https://heroeshomenetwork.com/states"},
+    {"@type": "ListItem", "position": 3, "name": "New Mexico", "item": "https://heroeshomenetwork.com/new-mexico"}
+  ]
+}
+</script>

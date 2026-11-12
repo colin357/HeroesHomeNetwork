@@ -1,0 +1,17 @@
+PAGE PATH:   /va-loan-class
+OLD URL:     https://heroeshomenetwork.com/va-loan-class.html
+PAGE TITLE:  Free VA Loan Class for Real Estate Agents | Heroes Home Network
+DESCRIPTION: Stop losing military buyers to VA loan myths. A free monthly online class for real estate agents who want to understand VA loans and win more veteran clients. Save your spot.
+SOCIAL IMAGE: https://heroeshomenetwork.com/assets/social-share.png
+
+HEAD TRACKING CODE (page settings > Tracking Code > Head):
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "VA Loans for Real Estate Agents",
+  "description": "Free monthly online class teaching real estate agents how VA loans actually work so they can win and serve more military buyers.",
+  "provider": {"@type": "Organization", "name": "Heroes Home Network", "url": "https://heroeshomenetwork.com/"},
+  "isAccessibleForFree": true
+}
+</script>
