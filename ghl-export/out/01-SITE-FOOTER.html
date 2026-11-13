@@ -7,6 +7,8 @@
    agent-join, class-signup, compass-class. */
 var HHN_WEBHOOK_URL = 'PASTE_HIGHLEVEL_WEBHOOK_URL_HERE';
 
+function hhnRoot() { return document.querySelector('.hhn-page') || document.body; }
+
 function hhnReady(fn) {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
   else fn();
@@ -35,14 +37,6 @@ function hhnSend(kind, opts) {
   });
 }
 
-/* Pages that used <body class="..."> carry a marker div instead. */
-hhnReady(function () {
-  document.querySelectorAll('[data-hhn-body-class]').forEach(function (el) {
-    el.getAttribute('data-hhn-body-class').split(/\s+/).forEach(function (c) {
-      if (c) document.body.classList.add(c);
-    });
-  });
-});
 
 /* ---- main.js ---- */
 // Heroes Home Network — shared interactions
@@ -151,7 +145,7 @@ hhnReady(function () {
     if (usMap) {
       var tip = document.createElement('div');
       tip.className = 'map-tip';
-      document.body.appendChild(tip);
+      hhnRoot().appendChild(tip);
       usMap.addEventListener('mousemove', function (e) {
         var st = e.target.closest('.st');
         if (!st) { tip.classList.remove('show'); return; }
@@ -286,7 +280,7 @@ hhnReady(function () {
 
   function open() {
     if (!modal) {
-      document.body.insertAdjacentHTML('beforeend', MODAL_HTML);
+      hhnRoot().insertAdjacentHTML('beforeend', MODAL_HTML);
       modal = document.getElementById('join-modal');
       modal.addEventListener('click', function (e) {
         if (e.target.closest('[data-join-close]')) close();

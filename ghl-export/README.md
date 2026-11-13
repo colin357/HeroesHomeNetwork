@@ -17,7 +17,9 @@ Everything to paste is in `out/`. Regenerate it any time with `python3 ghl-expor
 
 ## 2. For every page (191 of them, listed in `out/PAGE-LIST.csv`)
 1. Add a page and set its **path** to the `PAGE PATH` line in `pages/<name>.seo.txt`.
-2. Add one full-width section with one **Custom Code** element, and paste `pages/<name>.html` into it.
+2. Add one section with one **Custom Code** element, and paste `pages/<name>.html` into it. If you can, set the
+   section to **Full Width** with zero padding. The CSS also breaks the page out to full width on its own, but HighLevel's
+   default section padding can leave a gap above and below.
 3. In page **SEO settings**, enter the title, description and social image from the `.seo.txt` file.
 4. Paste the `HEAD TRACKING CODE` block from the `.seo.txt` file into the page's head tracking code (structured data for Google).
 
@@ -32,3 +34,8 @@ Everything to paste is in `out/`. Regenerate it any time with `python3 ghl-expor
 Pages are flattened with `.html` dropped, for example `/bases/fort-bragg.html` → `/fort-bragg`,
 `/states/texas.html` → `/texas`, `/va-loan-guide.html` → `/va-loan-guide`, `/bases/` → `/bases`.
 All links inside the pages already use the new paths.
+
+## How the CSS avoids HighLevel's styles
+Every rule is scoped under the `.hhn-page` wrapper that each page block starts with, and `rem` sizes are converted
+to `px`. HighLevel's base styles (root font size, link colors, list padding) therefore can't resize or restyle the
+site, and the site's styles don't leak into HighLevel's editor or popups.

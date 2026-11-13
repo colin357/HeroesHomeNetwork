@@ -113,13 +113,15 @@ header.site {
 }
 header.site.scrolled { box-shadow: 0 8px 32px rgba(15, 23, 34, .08); background: rgba(255, 255, 255, .92); }
 .nav-wrap {
-  max-width: var(--max);
+  max-width: 1400px; /* wider than --max: logo + 6 links + 2 buttons need ~1320px */
   margin: 0 auto;
   padding: 14px 24px;
   display: flex;
   align-items: center;
   gap: 28px;
 }
+.logo, .nav-cta { flex-shrink: 0; }
+.nav-cta { white-space: nowrap; }
 .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--navy); line-height: 1.05; }
 .logo img { width: auto; height: 60px; transition: transform .5s var(--ease); }
 .logo:hover img { transform: scale(1.04); }
@@ -1325,6 +1327,7 @@ a.when-link:hover { background: var(--red); border-color: var(--red); color: #ff
   nav.main a { padding: 9px 10px; font-size: .86rem; }
   .nav-wrap { gap: 18px; }
 }
+@media (max-width: 1200px) { nav.main a { padding: 9px 6px; } .nav-wrap { gap: 12px; } }
 @media (max-width: 1100px) { .nav-join-mobile { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 6px; } }
 
 body.join-open { overflow: hidden; }

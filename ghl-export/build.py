@@ -72,6 +72,49 @@ def rewrite_links(s):
     return s
 
 
+def scope_selector(sel):
+    sel = sel.strip()
+    if sel == ":root" or sel == "body":
+        return ".hhn-page"
+    if sel.startswith("body.join-open") or sel == "html":
+        return sel
+    if sel.startswith("body."):
+        return ".hhn-page." + sel[5:]
+    if sel.startswith("*"):
+        return ".hhn-page" + sel[1:] + ", .hhn-page " + sel
+    return ".hhn-page " + sel
+
+
+def scope_css(css):
+    """Prefix every rule with .hhn-page so HighLevel's styles can't override
+    ours (and ours can't leak into HighLevel's), and convert rem to px so
+    HighLevel's root font size doesn't rescale the site."""
+    css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+    css = re.sub(r"(?<![\w.-])(\d*\.?\d+)rem\b",
+                 lambda m: f"{float(m.group(1)) * 16:g}px", css)
+    out, i, n = [], 0, len(css)
+    while i < n:
+        j = css.find("{", i)
+        if j == -1:
+            out.append(css[i:]); break
+        head = css[i:j].strip()
+        depth, k = 1, j + 1
+        while depth:
+            if css[k] == "{": depth += 1
+            elif css[k] == "}": depth -= 1
+            k += 1
+        inner = css[j + 1:k - 1]
+        if head.startswith("@media") or head.startswith("@supports"):
+            out.append(f"{head} {{\n{scope_css(inner)}\n}}\n")
+        elif head.startswith("@"):
+            out.append(f"{head} {{{inner}}}\n")
+        else:
+            sels = ", ".join(scope_selector(x) for x in head.split(","))
+            out.append(f"{sels} {{{inner}}}\n")
+        i = k
+    return "".join(out)
+
+
 def build_js():
     order = ["main.js", "join-network.js", "lead-capture.js"]
     guards = {
@@ -85,6 +128,8 @@ def build_js():
         js = js.replace("document.addEventListener('DOMContentLoaded', ", "hhnReady(")
         js = js.replace("fetch('/api/lead', {", "hhnSend('lead', {")
         js = js.replace("fetch('/api/class-signup', {", "hhnSend('class-signup', {")
+        js = js.replace("document.body.appendChild(", "hhnRoot().appendChild(")
+        js = js.replace("document.body.insertAdjacentHTML(", "hhnRoot().insertAdjacentHTML(")
         js = js.replace('[href^="/states/"][href$=".html"]', "[data-state-link]")
         if f in guards:
             js = f"if ({guards[f]}) {{\n{js}\n}}"
@@ -96,6 +141,8 @@ def build_js():
    "source" field: pre-approval, bah-calculator, state-guide, pcs-checklist,
    agent-join, class-signup, compass-class. */
 var HHN_WEBHOOK_URL = 'PASTE_HIGHLEVEL_WEBHOOK_URL_HERE';
+
+function hhnRoot() { return document.querySelector('.hhn-page') || document.body; }
 
 function hhnReady(fn) {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
@@ -125,14 +172,6 @@ function hhnSend(kind, opts) {
   });
 }
 
-/* Pages that used <body class="..."> carry a marker div instead. */
-hhnReady(function () {
-  document.querySelectorAll('[data-hhn-body-class]').forEach(function (el) {
-    el.getAttribute('data-hhn-body-class').split(/\s+/).forEach(function (c) {
-      if (c) document.body.classList.add(c);
-    });
-  });
-});
 """
     return "<script>\n" + helpers + "\n" + "\n\n".join(parts) + "\n</script>\n"
 
@@ -146,13 +185,23 @@ def main():
              '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
              '<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;'
              '9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">\n')
-    css = (ROOT / "css" / "style.css").read_text()
+    css = scope_css((ROOT / "css" / "style.css").read_text())
     css += """
-/* ---- HighLevel overrides: let the pasted blocks run edge to edge ---- */
-.c-custom-code, .c-custom-code > div, .hl_page-creator--row:has(.c-custom-code),
-.hl_page-creator--column:has(.c-custom-code), .c-section:has(.c-custom-code),
-.c-row:has(.c-custom-code), .c-column:has(.c-custom-code) {
-  padding: 0 !important; margin: 0 !important; max-width: none !important; width: 100% !important;
+/* ---- HighLevel layout fixes ---------------------------------------------
+   Break the page out of HighLevel's section/row width cap so it spans the
+   full window, whatever the section's width setting. */
+html, body { overflow-x: clip; }
+.hhn-page {
+  position: relative; left: 50%;
+  width: 100vw !important; max-width: 100vw !important;
+  margin-left: -50vw !important; margin-right: 0 !important;
+  text-align: left;
+}
+.c-custom-code, .c-custom-code > div, .c-section:has(.hhn-page), .c-row:has(.hhn-page),
+.c-column:has(.hhn-page), .c-section:has(.hhn-page) .inner, .c-row:has(.hhn-page) .inner,
+.c-column:has(.hhn-page) .inner {
+  padding: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important;
+  max-width: none !important; overflow: visible !important;
 }
 """
     (OUT / "00-SITE-HEAD.html").write_text(fonts + "<style>\n" + css + "\n</style>\n")
@@ -171,8 +220,7 @@ def main():
         body = src[body_tag.end():src.rindex("</body>")]
         body = re.sub(r'<script src="[^"]*"></script>\s*', "", body).strip()
         bc = re.search(r'class="([^"]*)"', body_tag.group(1))
-        if bc:
-            body = f'<div data-hhn-body-class="{bc.group(1)}" hidden></div>\n' + body
+        body = f'<div class="hhn-page{" " + bc.group(1) if bc else ""}">\n{body}\n</div>'
         body = rewrite_links(body)
         ld = rewrite_links(ld)
 
