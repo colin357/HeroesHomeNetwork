@@ -26,8 +26,8 @@ DOMAIN = "https://heroeshomenetwork.com"
 # (Until then the pages point at the files on the current domain, which stop
 # loading once the domain moves to HighLevel.)
 ASSET_URLS = {
-    "logo.png": DOMAIN + "/assets/logo.png",
-    "favicon.png": DOMAIN + "/assets/favicon.png",
+    "logo.png": "https://files.leadconnectorhq.com/file/6af677114a2360a4d7cab790/logo.png",
+    "favicon.png": "https://files.leadconnectorhq.com/file/6af677114a2360a4d7cab790/logo.png",
     "hero-family.jpg": DOMAIN + "/assets/hero-family.jpg",
     "social-share.png": DOMAIN + "/assets/social-share.png",
 }
