@@ -172,7 +172,19 @@ function hhnSend(kind, opts) {
   });
 }
 
+
+/* Pages pasted before an image moved to HighLevel Media still point at the
+   old domain; swap those links for the HighLevel-hosted copies. */
+var HHN_ASSETS = __HHN_ASSETS__;
+hhnReady(function () {
+  document.querySelectorAll('img[src*="/assets/"]').forEach(function (img) {
+    var name = img.getAttribute('src').split('/assets/')[1];
+    if (HHN_ASSETS[name]) img.src = HHN_ASSETS[name];
+  });
+});
 """
+    moved = {k: v for k, v in ASSET_URLS.items() if not v.startswith(DOMAIN)}
+    helpers = helpers.replace("__HHN_ASSETS__", json.dumps(moved))
     return "<script>\n" + helpers + "\n" + "\n\n".join(parts) + "\n</script>\n"
 
 
@@ -186,6 +198,10 @@ def main():
              '<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;'
              '9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">\n')
     css = scope_css((ROOT / "css" / "style.css").read_text())
+    # Same swap in CSS, so old-link images show the new file before any JS runs.
+    for name, url in ASSET_URLS.items():
+        if not url.startswith(DOMAIN):
+            css += f'.hhn-page img[src$="/assets/{name}"] {{ content: url("{url}"); }}\n'
     css += """
 /* ---- HighLevel layout fixes ---------------------------------------------
    Break the page out of HighLevel's section/row width cap so it spans the

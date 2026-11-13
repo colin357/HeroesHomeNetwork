@@ -38,6 +38,16 @@ function hhnSend(kind, opts) {
 }
 
 
+/* Pages pasted before an image moved to HighLevel Media still point at the
+   old domain; swap those links for the HighLevel-hosted copies. */
+var HHN_ASSETS = {"logo.png": "https://files.leadconnectorhq.com/file/6af677114a2360a4d7cab790/logo.png", "favicon.png": "https://files.leadconnectorhq.com/file/6af677114a2360a4d7cab790/logo.png"};
+hhnReady(function () {
+  document.querySelectorAll('img[src*="/assets/"]').forEach(function (img) {
+    var name = img.getAttribute('src').split('/assets/')[1];
+    if (HHN_ASSETS[name]) img.src = HHN_ASSETS[name];
+  });
+});
+
 /* ---- main.js ---- */
 // Heroes Home Network — shared interactions
 (function () {
